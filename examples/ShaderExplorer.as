@@ -109,6 +109,13 @@ public class ShaderExplorer extends Sprite
 
     public function ShaderExplorer()
     {
+        addEventListener(Event.ADDED_TO_STAGE, init);
+    }
+
+    private function init(evt:Event):void
+    {
+        removeEventListener(Event.ADDED_TO_STAGE, init);
+
         // Init stage.
         stage.scaleMode = StageScaleMode.NO_SCALE;
         stage.align = StageAlign.TOP_LEFT;

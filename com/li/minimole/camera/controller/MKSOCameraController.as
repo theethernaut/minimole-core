@@ -7,6 +7,7 @@
  */
 package com.li.minimole.camera.controller
 {
+
 import com.li.minimole.utils.KeyManager;
 
 import flash.display.Sprite;
@@ -14,8 +15,10 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 
 /*
-    MouseKeyboardSmoothOrbitCameraController.
-    Idem. SmoothOrbitCameraController but can be controlled via mouse and keyboard.
+ MouseKeyboardSmoothOrbitCameraController.
+ Idem. SmoothOrbitCameraController but can be controlled via mouse and keyboard.
+
+ TODO: Weird Mac FP11 incubator 2 bug, cant catch MouseMove events. Also, mouse coords not updated.
  */
 public class MKSOCameraController extends Sprite
 {
@@ -30,7 +33,7 @@ public class MKSOCameraController extends Sprite
     public var mouseEasing:Number = 0.005;
     public var keyboardAngularSpeed:Number = 0.1;
     public var keyboardLinearSpeed:Number = 0.1;
-    public var showInteractionArea:Boolean = false;
+    public var showInteractionArea:Boolean = true;
     public var mouseInteractionEnabled:Boolean = true;
 
     public function MKSOCameraController(camera:*)
@@ -49,7 +52,8 @@ public class MKSOCameraController extends Sprite
 
         addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
         stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
-        stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+        // Weird Mac FP11 incubator 2 bug, cant catch MouseMove events.
+//        stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
 
         stage.addEventListener(Event.RESIZE, stage_resizeHandler);
         resize();
@@ -58,6 +62,7 @@ public class MKSOCameraController extends Sprite
     public function update():void
     {
         updateKeyboardInput();
+        updateMouseInput();
         _sOCameraController.update();
     }
 
@@ -95,10 +100,19 @@ public class MKSOCameraController extends Sprite
         if(!mouseInteractionEnabled)
             return;
 
-        _dx = _lastMouseX - stage.mouseX;
-        _dy = _lastMouseY - stage.mouseY;
-        _sOCameraController.azimuth -= _dx*mouseEasing;
-        _sOCameraController.elevation += _dy*mouseEasing;
+        if(_mouseIsDown)
+        {
+//            trace("mouse is down.");
+//            trace("smx: " + mouseX);
+//            trace("smy: " + mouseY);
+            _dx = _lastMouseX - mouseX;
+            _dy = _lastMouseY - mouseY;
+            _sOCameraController.azimuth -= _dx*mouseEasing;
+            _sOCameraController.elevation += _dy*mouseEasing;
+        }
+
+        _lastMouseX = mouseX;
+        _lastMouseY = mouseY;
     }
 
     private function stageInitHandler(evt:Event):void
@@ -109,21 +123,14 @@ public class MKSOCameraController extends Sprite
 
     private function mouseDownHandler(event:MouseEvent):void
     {
+//        trace("mouseDown");
         _mouseIsDown = true;
     }
 
     private function mouseUpHandler(event:MouseEvent):void
     {
+//        trace("mouseUp");
         _mouseIsDown = false;
-    }
-
-    private function mouseMoveHandler(event:MouseEvent):void
-    {
-        if(_mouseIsDown)
-            updateMouseInput();
-
-        _lastMouseX = stage.mouseX;
-        _lastMouseY = stage.mouseY;
     }
 
     private function stage_resizeHandler(event:Event):void
