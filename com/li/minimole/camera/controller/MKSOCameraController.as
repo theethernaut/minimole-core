@@ -33,7 +33,7 @@ public class MKSOCameraController extends Sprite
     public var mouseEasing:Number = 0.005;
     public var keyboardAngularSpeed:Number = 0.1;
     public var keyboardLinearSpeed:Number = 0.1;
-    public var showInteractionArea:Boolean = true;
+    public var showInteractionArea:Boolean = false;
     public var mouseInteractionEnabled:Boolean = true;
 
     public function MKSOCameraController(camera:*)

@@ -147,7 +147,7 @@ public class ShaderExplorer extends Sprite
 
         // Color materials.
         _colorMaterial = new ColorMaterial();
-//        _depthColorMaterial = new DepthColorMaterial();
+        _depthColorMaterial = new DepthColorMaterial();
 //        _normalsColorMaterial = new NormalsColorMaterial();
         _gouraudColorMaterial = new GouraudColorMaterial();
         _phongColorMaterial = new PhongColorMaterial();
@@ -161,6 +161,7 @@ public class ShaderExplorer extends Sprite
 //        _phongToonMaterial = new PhongToonMaterial(0xFFFFFF, 6);
 //        _xRayMaterial = new XRayMaterial();
 //        _wireframeMaterial = new WireframeMaterial();
+        var defaultMaterial:MaterialBase = _depthColorMaterial;
 
         // Bg plane.
         // We need to use a plane because hardware 3d is always beneath all other layers.
@@ -173,7 +174,7 @@ public class ShaderExplorer extends Sprite
         }
 
         // Model.
-        mesh = new ObjParser(Model, _gouraudColorMaterial, 0.2);
+        mesh = new ObjParser(Model, defaultMaterial, 0.2);
         MeshUtils.prepareMeshForWireframe(mesh);
         view.scene.addChild(mesh);
 
@@ -210,7 +211,7 @@ public class ShaderExplorer extends Sprite
         _gui.addGroup("Material:"); // Material.
         var mats:Array = [
             {label:"ColorMaterial",	         data:_colorMaterial},
-//            {label:"DepthColorMaterial",	 data:_depthColorMaterial}, // TODO: Broken in PB3D 0.2
+            {label:"DepthColorMaterial",	 data:_depthColorMaterial}, // TODO: Broken in PB3D 0.2
 //            {label:"NormalsMaterial",	     data:_normalsColorMaterial},
             {label:"GouraudColorMaterial",   data:_gouraudColorMaterial},
             {label:"PhongColorMaterial",     data:_phongColorMaterial},

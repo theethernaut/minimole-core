@@ -14,8 +14,6 @@ module_fragment_program DepthMaterialKernel
     globals
         global parameter float-4 cameraPosition
         global parameter float-4 materialColor
-        global parameter float-4-4 objectToClipSpaceTransform
-        global parameter float-4 props
         global parameter float-4-4 worldTransform
         input vertex float-4 vertexPosition
             metadata

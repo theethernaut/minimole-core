@@ -55,13 +55,12 @@ public class DepthColorMaterial extends MaterialBase implements IColorMaterial
         _parameterBufferHelper.setMatrixParameterByName(Context3DProgramType.VERTEX, "objectToClipSpaceTransform", modelViewProjectionMatrix, true);
 
         // Set material params.
-        _parameterBufferHelper.setMatrixParameterByName(Context3DProgramType.VERTEX, "worldTransform", mesh.transform, true);
+        var zDelta:Number = 1;
+        var tt:Matrix3D = mesh.transform.clone();
+        tt.appendScale(zDelta, zDelta, zDelta);
+        _parameterBufferHelper.setMatrixParameterByName(Context3DProgramType.VERTEX, "worldTransform", tt, true);
         _parameterBufferHelper.setNumberParameterByName(Context3DProgramType.VERTEX, "cameraPosition", Core3D.instance.camera.positionVector);
         _parameterBufferHelper.setNumberParameterByName(Context3DProgramType.VERTEX, "materialColor", _color);
-        var zNear:Number = Core3D.instance.view.camera.lens.zNear;
-        var zFar:Number = Core3D.instance.view.camera.lens.zFar;
-        var zDelta:Number = zFar - zNear;
-        _parameterBufferHelper.setNumberParameterByName(Context3DProgramType.VERTEX, "props", Vector.<Number>([zDelta, zNear/zDelta, 0.0, 0.0]));
         _parameterBufferHelper.update();
 
         // Set attributes and draw.

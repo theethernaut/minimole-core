@@ -14,8 +14,6 @@ module_material_vertex_program DepthMaterialKernel
     globals
         global parameter float-4 cameraPosition
         global parameter float-4 materialColor
-        global parameter float-4-4 objectToClipSpaceTransform
-        global parameter float-4 props
         global parameter float-4-4 worldTransform
         input vertex float-4 vertexPosition
             metadata
@@ -32,19 +30,19 @@ module_material_vertex_program DepthMaterialKernel
             body
                 basic_block entry%A !! outlets(basic%A)
                     vertexPosWorld-0 = allocNonSSA type(float-4) : float-4
-                    vertexPosClip-0 = allocNonSSA type(float-4) : float-4
-                    zDelta-0 = allocNonSSA type(float) : float
-                    zNearOverZDelta-0 = allocNonSSA type(float) : float
-                    depth-0 = allocNonSSA type(float) : float
+                    delta-0 = allocNonSSA type(float-3) : float-3
+                    dis-0 = allocNonSSA type(float) : float
                     col-0 = allocNonSSA type(float-4) : float-4
                     jump block(basic%A) : void
                 end_basic_block
                 basic_block basic%A !! inlets(entry%A) outlets(exit%A)
-                    _LD_zDelta-1 = extractVE props, const(int, 0) : float
-                    vertexPositionElem%A-0 = extractVE vertexPosition, const(int, 0) : float
-                    _LD_depth-1 = div vertexPositionElem%A-0, _LD_zDelta-1 : float
-                    _LD_col-1 = mul materialColor, _LD_depth-1 : float-4
-                    _LD_interpolatedColor-1 = insertVE const(float, 1), _LD_col-1, const(int, 3) : float-4
+                    _LD_vertexPosWorld-1 = mul vertexPosition, worldTransform : float-4
+                    _anonSwizzle%A-0 = swizzleRHS _LD_vertexPosWorld-1, const(int-3, (0, 1, 2)) : float-3
+                    _anonSwizzle%B-0 = swizzleRHS cameraPosition, const(int-3, (0, 1, 2)) : float-3
+                    _LD_delta-1 = sub _anonSwizzle%A-0, _anonSwizzle%B-0 : float-3
+                    _dotResult%A-0 = dot _LD_delta-1, _LD_delta-1 : float
+                    _LD_dis-1 = sqrt _dotResult%A-0 : float
+                    _LD_interpolatedColor-1 = div materialColor, _LD_dis-1 : float-4
                     jump block(exit%A) : void
                 end_basic_block
                 basic_block exit%A !! inlets(basic%A)
