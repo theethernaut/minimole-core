@@ -1,0 +1,56 @@
+<languageVersion : 1.0;>
+material kernel DepthMaterialKernel
+<
+    namespace : "com.li.minimole";
+    vendor    : "Li";
+    version   : 1;
+    description : "Darkens a solid color according to distance to the camera.";
+>
+{
+    // Inputs.
+    input vertex float4 vertexPosition
+    <
+        id: "PB3D_POSITION";
+    >;
+
+    // Parameters.
+    parameter float4x4 worldTransform;
+    parameter float4x4 objectToClipSpaceTransform;
+    parameter float4 cameraPosition;
+    parameter float4 materialColor;
+    parameter float4 props;
+
+    // Interpolated.
+    interpolated float4 interpolatedColor;
+
+    // Output.
+    output float4 result;
+
+    void evaluateVertex()
+    {
+        // Transform vertex position to world space.
+        float4 vertexPosWorld = vertexPosition * worldTransform;
+
+        // Get vertex to camera distance.
+        float4 vertexPosClip = vertexPosWorld * objectToClipSpaceTransform;
+
+        // Get zNear and zFar from props.
+        float zDelta = props[0];
+        float zNearOverZDelta = props[1];
+
+        // Evaluate depth and apply to color.
+        float depth = vertexPosition.x/zDelta;
+        //depth /= zDelta;
+        //depth -= zNearOverZDelta;
+        float4 col = materialColor * depth;
+        col.w = 1.0;
+
+        // Send to fragment shader.
+        interpolatedColor = col;
+    }
+
+    void evaluateFragment()
+    {
+        result = interpolatedColor;
+    }
+}
