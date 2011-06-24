@@ -1,0 +1,7 @@
+Minimal 3D engine designed for learning purposes only. It does not have the complications of a full 3D engine, however, it begins to address the basic concepts of 3D engine design. It has been developed merely as an exercise. Performance is secondary, clarity of concepts primary.
+
+Based on the Adobe Molehill API. The API is exposed as much as possible so it's good for experimentation without having to worry about the complications and flexibility of a larger engine.
+
+Shaders are based on Pixel Bender 3D. The idea behind this implementation is not efficiency or flexibility, but ease of experimentation and understanding. New materials are easy to implement and explore.
+
+Does not support: - Child nesting. - More than 1 light. - Animation. - Many other things =). 
