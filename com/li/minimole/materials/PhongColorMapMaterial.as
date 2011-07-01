@@ -7,6 +7,7 @@ import com.li.minimole.core.utils.TextureUtils;
 
 import com.li.minimole.core.utils.ColorUtils;
 import com.li.minimole.core.utils.VectorUtils;
+import com.li.minimole.core.utils.VectorUtils;
 import com.li.minimole.core.vo.RGB;
 import com.li.minimole.lights.PointLight;
 
@@ -14,9 +15,6 @@ import flash.display.BitmapData;
 import flash.display3D.Context3DProgramType;
 import flash.display3D.Context3DTextureFormat;
 import flash.display3D.Context3DVertexBufferFormat;
-
-import com.adobe.pixelBender3D.*;
-import com.adobe.pixelBender3D.utils.*;
 
 import flash.display3D.textures.Texture;
 import flash.geom.Matrix3D;
@@ -35,7 +33,7 @@ public class PhongColorMapMaterial extends MaterialBase implements IColorMateria
     private var _normalMap:Texture;
     private var _normalMapBmd:BitmapData;
 
-    private var _diffuseReflectionColor:Vector.<Number> = Vector.<Number>([1.0, 1.0, 1.0, 1.0]);
+    private var _diffuseReflectionColor:Vector.<Number>;
     private var _specularReflectionColor:Vector.<Number>;
     private var _lightProperties:Vector.<Number>;
 
@@ -48,6 +46,7 @@ public class PhongColorMapMaterial extends MaterialBase implements IColorMateria
         this.color = color;
 
         // TODO: getters and setters for these...
+        _diffuseReflectionColor = Vector.<Number>([1.0, 1.0, 1.0, 1.0]);
         _specularReflectionColor = Vector.<Number>([1.0, 1.0, 1.0, 1.0]);
         _lightProperties = Vector.<Number>([1.0, 1.0, 1.0, 1.0]); // ambient, diffuse, specular, specular concentration multiplier
     }
@@ -77,13 +76,21 @@ public class PhongColorMapMaterial extends MaterialBase implements IColorMateria
         _parameterBufferHelper.setMatrixParameterByName(Context3DProgramType.VERTEX, "objectToClipSpaceTransform", modelViewProjectionMatrix, true);
 
         // Set vertex params.
-        _parameterBufferHelper.setMatrixParameterByName("vertex", "modelTransform", mesh.transform, true);
+        _parameterBufferHelper.setMatrixParameterByName("vertex",   "modelTransform", mesh.transform, true);
         _parameterBufferHelper.setMatrixParameterByName("fragment", "modelReducedTransform", mesh.reducedTransform, true);
         _parameterBufferHelper.setNumberParameterByName("fragment", "lightPosition", light.positionVector);
         _parameterBufferHelper.setNumberParameterByName("fragment", "cameraPosition", Core3D.instance.camera.positionVector);
-        _parameterBufferHelper.setNumberParameterByName("fragment", "diffuseReflectionColor", VectorUtils.multiply4(_diffuseReflectionColor, light.colorVector));
-        _parameterBufferHelper.setNumberParameterByName("fragment", "specularReflectionColor", VectorUtils.multiply4(_specularReflectionColor, light.colorVector));
-        _parameterBufferHelper.setNumberParameterByName("fragment", "lightProperties", VectorUtils.multiply4(_lightProperties, light.lightProperties));
+        var precomputedLightProps:Vector.<Number> = VectorUtils.multiply4(_lightProperties, light.lightProperties); // Shaders reject multiplication between 2 constants.
+        var precomputedAmbient:Vector.<Number>;                                                                     // All these need to be precomputed.
+        var precomputedDiffuse:Vector.<Number>  = VectorUtils.multiply4(_diffuseReflectionColor, light.colorVector);
+        var precomputedSpecular:Vector.<Number> = VectorUtils.multiply4(_specularReflectionColor, light.colorVector);
+        precomputedAmbient  = VectorUtils.scale4(_diffuseReflectionColor, precomputedLightProps[0]);
+        precomputedDiffuse  = VectorUtils.scale4(precomputedDiffuse,      precomputedLightProps[1]);
+        precomputedSpecular = VectorUtils.scale4(precomputedSpecular,     precomputedLightProps[2]);
+        _parameterBufferHelper.setNumberParameterByName("fragment", "precomputedAmbient", precomputedAmbient);
+        _parameterBufferHelper.setNumberParameterByName("fragment", "precomputedDiffuse", precomputedDiffuse);
+        _parameterBufferHelper.setNumberParameterByName("fragment", "precomputedSpecular", precomputedSpecular);
+        _parameterBufferHelper.setNumberParameterByName("fragment", "lightProperties", precomputedLightProps);
         _parameterBufferHelper.update();
 
         // Set textures.

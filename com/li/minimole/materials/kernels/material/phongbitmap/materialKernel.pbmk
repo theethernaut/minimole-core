@@ -74,7 +74,7 @@ material kernel PhongBitmapMaterialKernel
 
         // Calculate diffuse term (not dependant on viewer position).
         float NL = dot(N, L);
-        NL = max(NL, 0.0); // Ignore negative values.
+        //NL = max(NL, 0.0); // Ignore negative values.
         //NL = clamp(NL, 0.0, 1.0);
         float4 KD = AC*D + DC*NL*D;
 

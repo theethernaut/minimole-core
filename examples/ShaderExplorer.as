@@ -33,6 +33,7 @@ import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.events.Event;
+import flash.events.MouseEvent;
 
 import flash.geom.Rectangle;
 import flash.geom.Vector3D;
@@ -148,20 +149,20 @@ public class ShaderExplorer extends Sprite
         // Color materials.
         _colorMaterial = new ColorMaterial();
         _depthColorMaterial = new DepthColorMaterial();
-//        _normalsColorMaterial = new NormalsColorMaterial();
+        _normalsColorMaterial = new NormalsColorMaterial();
         _gouraudColorMaterial = new GouraudColorMaterial();
         _phongColorMaterial = new PhongColorMaterial();
-//        _phongColorMapMaterial = new PhongColorMapMaterial(0xFFFFFF, normalMap);
-//        _bitmapMaterial = new BitmapMaterial(texture);
-//        _phongBitmapMaterial = new PhongBitmapMaterial(texture);
-//        _phongBitmapMapMaterial = new PhongBitmapMapMaterial(texture, normalMap, specularMap);
-//        _enviroCubicalMaterial = new EnviroCubicalMaterial(envPosX, envNegX, envPosY, envNegY, envPosZ, envNegZ);
-//        _enviroSphericalMaterial = new EnviroSphericalMaterial(envPosX);
-//        _vertexColorMaterial = new VertexColorMaterial();
-//        _phongToonMaterial = new PhongToonMaterial(0xFFFFFF, 6);
-//        _xRayMaterial = new XRayMaterial();
-//        _wireframeMaterial = new WireframeMaterial();
-        var defaultMaterial:MaterialBase = _depthColorMaterial;
+        _phongColorMapMaterial = new PhongColorMapMaterial(0xFFFFFF, normalMap);
+        _bitmapMaterial = new BitmapMaterial(texture);
+        _phongBitmapMaterial = new PhongBitmapMaterial(texture); // TODO: BAD COLOR.
+        _phongBitmapMapMaterial = new PhongBitmapMapMaterial(texture, normalMap, specularMap); // TODO: BAD COLOR.
+        _enviroCubicalMaterial = new EnviroCubicalMaterial(envPosX, envNegX, envPosY, envNegY, envPosZ, envNegZ); // TODO: Sampler 0 does not support texture format.
+        _enviroSphericalMaterial = new EnviroSphericalMaterial(envPosX); // TODO: VISUALLY CORRECT?
+        _vertexColorMaterial = new VertexColorMaterial();
+        //_phongToonMaterial = new PhongToonMaterial(0xFFFFFF, 6); // TODO: BOTH ARE CONSTANTS...
+        _xRayMaterial = new XRayMaterial();
+//        _wireframeMaterial = new WireframeMaterial(); // TODO: BOTH ARE CONSTANTS...
+        var defaultMaterial:MaterialBase = _phongColorMapMaterial;
 
         // Bg plane.
         // We need to use a plane because hardware 3d is always beneath all other layers.
@@ -211,14 +212,14 @@ public class ShaderExplorer extends Sprite
         _gui.addGroup("Material:"); // Material.
         var mats:Array = [
             {label:"ColorMaterial",	         data:_colorMaterial},
-            {label:"DepthColorMaterial",	 data:_depthColorMaterial}, // TODO: Broken in PB3D 0.2
-//            {label:"NormalsMaterial",	     data:_normalsColorMaterial},
+            {label:"DepthColorMaterial",	 data:_depthColorMaterial},
+            {label:"NormalsMaterial",	     data:_normalsColorMaterial},
             {label:"GouraudColorMaterial",   data:_gouraudColorMaterial},
             {label:"PhongColorMaterial",     data:_phongColorMaterial},
 //            {label:"PhongColorMapMaterial",  data:_phongColorMapMaterial},
 //            {label:"BitmapMaterial",         data:_bitmapMaterial},
-//            {label:"PhongBitmapMaterial",    data:_phongBitmapMaterial},
-//            {label:"PhongBitmapMapMaterial", data:_phongBitmapMapMaterial},
+            {label:"PhongBitmapMaterial",    data:_phongBitmapMaterial},
+            {label:"PhongBitmapMapMaterial", data:_phongBitmapMapMaterial},
             /*{label:"EnviroCubicalMaterial",         data:_enviroMaterial},*/ // TODO: CubeMaps not yet supported in PB3D.
 //            {label:"VertexColorMaterial",    data:_vertexColorMaterial},
 //            {label:"PhongToonMaterial",      data:_phongToonMaterial},
@@ -232,7 +233,19 @@ public class ShaderExplorer extends Sprite
         _gui.addToggle("rotateModel", {label:"spin model"});
         _gui.addToggle("forceNormals", {label:"hard normals (if a normal map is not used)"});
         _gui.addToggle("lightFollow", {label:"light follows camera (if light is used)"});
+        _gui.container.addEventListener(MouseEvent.MOUSE_DOWN, guiMouseDownHandler);
+        _gui.container.addEventListener(MouseEvent.MOUSE_UP, guiMouseUpHandler);
         setTimeout(showGUi, 1000);
+    }
+
+    private var _usingGUI:Boolean;
+    private function guiMouseDownHandler(evt:MouseEvent):void
+    {
+        _usingGUI = true;
+    }
+    private function guiMouseUpHandler(evt:MouseEvent):void
+    {
+        _usingGUI = false;
     }
 
     private function showGUi():void
@@ -247,7 +260,8 @@ public class ShaderExplorer extends Sprite
     public function set lightColor(value:uint):void
     {
         view.scene.light.color = value;
-        _lightColorMaterial.color = value;
+        if(USE_LIGHT_TRACER)
+            _lightColorMaterial.color = value;
     }
 
     public function get materialColor():uint
@@ -289,6 +303,9 @@ public class ShaderExplorer extends Sprite
 
     private function enterframeHandler(evt:Event):void
     {
+        if(_usingGUI)
+            return;
+
         // Update model position.
         if(rotateModel)
             mesh.rotationDegreesY += 1;

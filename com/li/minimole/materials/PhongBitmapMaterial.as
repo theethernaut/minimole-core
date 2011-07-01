@@ -9,16 +9,11 @@ import com.li.minimole.core.utils.VectorUtils;
 import com.li.minimole.lights.PointLight;
 
 import flash.display.BitmapData;
-import flash.display3D.Context3DProgramType;
 import flash.display3D.Context3DTextureFormat;
 import flash.display3D.Context3DVertexBufferFormat;
 
-import com.adobe.pixelBender3D.*;
-import com.adobe.pixelBender3D.utils.*;
-
 import flash.display3D.textures.Texture;
 import flash.geom.Matrix3D;
-import flash.geom.Vector3D;
 
 /*
     Bitmap material with phong shading.

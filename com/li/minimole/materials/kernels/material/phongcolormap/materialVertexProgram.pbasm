@@ -13,13 +13,14 @@ module_material_vertex_program PhongColorMapMaterialKernel
     
     globals
         global parameter float-4 cameraPosition
-        global parameter float-4 diffuseReflectionColor
         global parameter float-4 lightPosition
         global parameter float-4 lightProperties
         global parameter float-4-4 modelReducedTransform
         global parameter float-4-4 modelTransform
         input image image-4 normalMap
-        global parameter float-4 specularReflectionColor
+        global parameter float-4 precomputedAmbient
+        global parameter float-4 precomputedDiffuse
+        global parameter float-4 precomputedSpecular
         input vertex float-4 vertexPosition
             metadata
                 id const(string, "PB3D_POSITION")
