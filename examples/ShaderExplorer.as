@@ -39,6 +39,8 @@ import flash.geom.Rectangle;
 import flash.geom.Vector3D;
 import flash.utils.setTimeout;
 
+import net.hires.debug.Stats;
+
 import uk.co.soulwire.gui.SimpleGUI;
 
 [SWF(width="1280", height="768", backgroundColor="0x000000", frameRate="30")]
@@ -120,6 +122,11 @@ public class ShaderExplorer extends Sprite
         // Init stage.
         stage.scaleMode = StageScaleMode.NO_SCALE;
         stage.align = StageAlign.TOP_LEFT;
+
+        // Stats.
+        var stats:Stats = new Stats();
+        stats.x = stage.stageWidth - 70;
+        addChild(stats);
 
         // Init 3d view.
         view = new View3D();
