@@ -161,7 +161,7 @@ public class ShaderExplorer extends Sprite
         _phongColorMaterial = new PhongColorMaterial();
         _phongColorMapMaterial = new PhongColorMapMaterial(0xFFFFFF, normalMap);
         _bitmapMaterial = new BitmapMaterial(texture);
-        _phongBitmapMaterial = new PhongBitmapMaterial(texture); // TODO: BAD COLOR.
+        _phongBitmapMaterial = new PhongBitmapMaterial(texture); // TODO: BAD COLOR - CAUSED BY BUGGY PB3D.
         _phongBitmapMapMaterial = new PhongBitmapMapMaterial(texture, normalMap, specularMap); // TODO: BAD COLOR.
         _enviroCubicalMaterial = new EnviroCubicalMaterial(envPosX, envNegX, envPosY, envNegY, envPosZ, envNegZ); // TODO: Sampler 0 does not support texture format.
         _enviroSphericalMaterial = new EnviroSphericalMaterial(envPosX); // TODO: VISUALLY CORRECT?
@@ -169,7 +169,7 @@ public class ShaderExplorer extends Sprite
         //_phongToonMaterial = new PhongToonMaterial(0xFFFFFF, 6); // TODO: BOTH ARE CONSTANTS...
         _xRayMaterial = new XRayMaterial();
 //        _wireframeMaterial = new WireframeMaterial(); // TODO: BOTH ARE CONSTANTS...
-        var defaultMaterial:MaterialBase = _phongColorMapMaterial;
+        var defaultMaterial:MaterialBase = _phongBitmapMaterial;
 
         // Bg plane.
         // We need to use a plane because hardware 3d is always beneath all other layers.

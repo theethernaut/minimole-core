@@ -72,12 +72,15 @@ public class PhongBitmapMaterial extends MaterialBase
         _parameterBufferHelper.setMatrixParameterByName("vertex", "objectToClipSpaceTransform", modelViewProjectionMatrix, true);
 
         // Set vertex params.
-        _parameterBufferHelper.setMatrixParameterByName("vertex", "modelTransform", mesh.transform, true);
-        _parameterBufferHelper.setMatrixParameterByName("vertex", "modelReducedTransform", mesh.reducedTransform, true);
+        _parameterBufferHelper.setMatrixParameterByName("vertex",   "modelTransform", mesh.transform, true);
+        _parameterBufferHelper.setMatrixParameterByName("vertex",   "modelReducedTransform", mesh.reducedTransform, true);
         _parameterBufferHelper.setNumberParameterByName("fragment", "lightPosition", light.positionVector);
         _parameterBufferHelper.setNumberParameterByName("fragment", "cameraPosition", Core3D.instance.camera.positionVector);
-        _parameterBufferHelper.setNumberParameterByName("fragment", "specularReflectionColor", VectorUtils.multiply4(_specularReflectionColor, light.colorVector));
-        _parameterBufferHelper.setNumberParameterByName("fragment", "lightProperties", VectorUtils.multiply4(_lightProperties, light.lightProperties));
+        var precomputedSpecular:Vector.<Number> = VectorUtils.multiply4(_specularReflectionColor, light.colorVector);
+        precomputedSpecular = VectorUtils.scale4(precomputedSpecular, _lightProperties[2]);
+        _parameterBufferHelper.setNumberParameterByName("fragment", "precomputedSpecular", precomputedSpecular);
+        var props:Vector.<Number> = VectorUtils.multiply4(_lightProperties, light.lightProperties);
+        _parameterBufferHelper.setNumberParameterByName("fragment", "lightProperties", props);
         _parameterBufferHelper.update();
 
         // Set textures.

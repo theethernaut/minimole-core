@@ -18,7 +18,7 @@ module_material_vertex_program PhongBitmapMaterialKernel
         global parameter float-4 lightProperties
         global parameter float-4-4 modelReducedTransform
         global parameter float-4-4 modelTransform
-        global parameter float-4 specularReflectionColor
+        global parameter float-4 precomputedSpecular
         input vertex float-4 vertexNormal
             metadata
                 id const(string, "PB3D_NORMAL")
