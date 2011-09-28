@@ -13,9 +13,6 @@ import flash.display3D.Context3DProgramType;
 import flash.display3D.Context3DTextureFormat;
 import flash.display3D.Context3DVertexBufferFormat;
 
-import com.adobe.pixelBender3D.*;
-import com.adobe.pixelBender3D.utils.*;
-
 import flash.display3D.textures.Texture;
 import flash.geom.Matrix3D;
 
@@ -57,7 +54,37 @@ public class PhongBitmapMapMaterial extends MaterialBase
         // TODO: getters and setters for these...
         _specularReflectionColor = Vector.<Number>([1.0, 1.0, 1.0, 1.0]);
         _lightProperties = Vector.<Number>([1.0, 1.0, 1.0, 1.0]); // ambient, diffuse, specular, specular concentration multiplier
-    }
+    	ambient = 0.1;
+		diffuse = 1.0;
+		specular = 0.25;
+	}
+
+	public function set ambient( value:Number ):void
+	{
+		_lightProperties[0] = value;
+	}
+	public function get ambient():Number
+	{
+		return _lightProperties[0];
+	}
+
+	public function set diffuse( value:Number ):void
+	{
+		_lightProperties[1] = value;
+	}
+	public function get diffuse():Number
+	{
+		return _lightProperties[1];
+	}
+
+	public function set specular( value:Number ):void
+	{
+		_lightProperties[2] = value;
+	}
+	public function get specular():Number
+	{
+		return _lightProperties[2];
+	}
 
     override protected function buildProgram3d():void
     {

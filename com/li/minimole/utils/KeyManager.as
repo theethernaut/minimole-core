@@ -1,8 +1,5 @@
 package com.li.minimole.utils
 {
-import flash.display.Stage;
-import flash.events.Event;
-import flash.events.KeyboardEvent;
 import flash.utils.Dictionary;
 
 public class KeyManager
@@ -11,61 +8,39 @@ public class KeyManager
     // Private variables.
     // ---------------------------------------------------------------------------------------------------------
 
-    public static const KEY_LEFT:uint = 37;
-    public static const KEY_RIGHT:uint = 39;
-    public static const KEY_UP:uint = 38;
-    public static const KEY_DOWN:uint = 40;
-    public static const KEY_W:uint = 87;
-    public static const KEY_A:uint = 65;
-    public static const KEY_S:uint = 83;
-    public static const KEY_D:uint = 68;
-    public static const KEY_Z:uint = 90;
-    public static const KEY_X:uint = 88;
-
-    // ---------------------------------------------------------------------------------------------------------
-    // Private variables.
-    // ---------------------------------------------------------------------------------------------------------
-
-    private static var _instance:KeyManager;
+    public const LEFT:uint = 37;
+    public const RIGHT:uint = 39;
+    public const UP:uint = 38;
+    public const DOWN:uint = 40;
+    public const W:uint = 87;
+    public const A:uint = 65;
+    public const S:uint = 83;
+    public const D:uint = 68;
+    public const Z:uint = 90;
+    public const X:uint = 88;
+    public const SPACEBAR:uint = 32;
+    public const SHIFT:uint = 16;
 
     private var _keysDown:Dictionary;
 
-    // ---------------------------------------------------------------------------------------------------------
-    // Public methods.
-    // ---------------------------------------------------------------------------------------------------------
-
-    public function KeyManager(stage:Stage)
+    public function KeyManager()
     {
         _keysDown = new Dictionary();
-
-        stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-        stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
     }
 
-    public static function getInstance(stage:Stage):KeyManager
+    public function keyDown(keyCode:uint):void
     {
-        if(!_instance)
-            _instance = new KeyManager(stage);
-        return _instance;
+        _keysDown[keyCode] = true;
+    }
+
+    public function keyUp(keyCode:uint):void
+    {
+        _keysDown[keyCode] = false;
     }
 
     public function keyIsDown(keyCode:uint):Boolean
     {
         return _keysDown[keyCode] ? _keysDown[keyCode] : false;
-    }
-
-    // ---------------------------------------------------------------------------------------------------------
-    // Event handlers.
-    // ---------------------------------------------------------------------------------------------------------
-
-    private function keyDownHandler(evt:KeyboardEvent):void
-    {
-        _keysDown[evt.keyCode] = true;
-    }
-
-    private function keyUpHandler(evt:KeyboardEvent):void
-    {
-        _keysDown[evt.keyCode] = false;
     }
 }
 }

@@ -46,8 +46,8 @@ module_material_vertex_program EnviroSimpleMaterialKernel
                     jump block(exit%A) : void
                 end_basic_block
                 basic_block exit%A !! inlets(basic%A)
-                    moveToNonSSA _LD_Q-1, Q : void
                     moveToNonSSA _LD_N-1, N : void
+                    moveToNonSSA _LD_Q-1, Q : void
                     ret : void
                 end_basic_block
             end_body

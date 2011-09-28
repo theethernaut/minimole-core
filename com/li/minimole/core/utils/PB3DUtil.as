@@ -163,7 +163,7 @@ public class PB3DUtil
         trace("              - RegisterElementGroup -");
 
         trace("                contiguous: " + group.contiguous);
-        trace("                nElements: " + group.nElements);
+        trace("                nElements: " + group.elements.length);
         trace("                elements: ");
         for each(var element:RegisterElement in group.elements)
             traceRegisterElement(element);

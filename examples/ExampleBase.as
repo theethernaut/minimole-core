@@ -1,83 +1,126 @@
 package examples
 {
-import com.li.minimole.camera.controller.MKSOCameraController;
-import com.li.minimole.core.Core3D;
-import com.li.minimole.core.View3D;
 
-import flash.display.Sprite;
-import flash.display.StageAlign;
-import flash.display.StageScaleMode;
-import flash.events.Event;
+	import com.li.minimole.camera.controller.OrbitCameraController;
+	import com.li.minimole.core.Core3D;
+	import com.li.minimole.core.View3D;
 
-import flash.utils.setTimeout;
+	import flash.display.Sprite;
+	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
 
-import uk.co.soulwire.gui.SimpleGUI;
+	import net.hires.debug.Stats;
 
-/*
-    Not actually an abstract class, rather a sample to copy and paste and create a new experiment.
-    :P
- */
-public class ExampleBase extends Sprite
-{
-    public var view:View3D;
+	import uk.co.soulwire.gui.SimpleGUI;
 
-    private var _cameraController:MKSOCameraController;
-    private var _gui:SimpleGUI;
+	public class ExampleBase extends Sprite
+	{
+		public var view:View3D;
+		public var gui:SimpleGUI;
+		public var cameraController:OrbitCameraController;
+		public var stats:Stats;
 
-    public function ExampleBase()
-    {
-        addEventListener(Event.ADDED_TO_STAGE, init);
-    }
+		public function ExampleBase()
+		{
+			addEventListener(Event.ADDED_TO_STAGE, stageInitHandler);
+		}
 
-    private function init(evt:Event):void
-    {
-        removeEventListener(Event.ADDED_TO_STAGE, init);
+		private function stageInitHandler(evt:Event):void
+		{
+			removeEventListener(Event.ADDED_TO_STAGE, stageInitHandler);
 
-        // Init stage.
-        stage.scaleMode = StageScaleMode.NO_SCALE;
-        stage.align = StageAlign.TOP_LEFT;
+			// Init stage.
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
 
-        // Init 3d view.
-        view = new View3D();
-        addChild(view);
+			// Init 3d view.
+			view = new View3D();
+			addChild(view);
 
-        // Set light.
-        view.scene.light.color    = 0xFFFFFF;
-        view.scene.light.ambient  = 0.0;
-        view.scene.light.diffuse  = 0.8;
-        view.scene.light.specular = 0.5;
-        view.scene.light.concentration = 25;
+			// Stats
+			stats = new Stats();
+			stats.x = stage.stageWidth - 70;
+			addChild(stats);
 
-        // Turn on/off shader debugging.
-        Core3D.instance.debugShaders = true;
+			// Turn on/off shader debugging.
+			Core3D.instance.debugShaders = true;
 
-        // Init camera controller.
-        _cameraController = new MKSOCameraController(view.camera);
-        addChildAt(_cameraController, 0);
+			// Init camera controller.
+			cameraController = new OrbitCameraController(view.camera);
 
-        // Start loop.
-        addEventListener(Event.ENTER_FRAME, enterframeHandler);
+			// stage listeners for camera control
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, stageMouseDownHandler);
+			stage.addEventListener(MouseEvent.MOUSE_UP, stageMouseUpHandler);
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, stageMouseMoveHandler);
+			stage.addEventListener(MouseEvent.MOUSE_WHEEL, stageMouseWheelHandler);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, stageKeyDownHandler);
+			stage.addEventListener(KeyboardEvent.KEY_UP, stageKeyUpHandler);
 
-        // UI.
-        _gui = new SimpleGUI(this);
-        setTimeout(showGUi, 1000);
-    }
+			// Start loop.
+			addEventListener(Event.ENTER_FRAME, enterframeHandler);
 
-    private function showGUi():void
-    {
-        _gui.show();
-    }
+			// UI.
+			gui = new SimpleGUI(this);
+			gui.show();
 
-    private function enterframeHandler(evt:Event):void
-    {
-        // Update camera position.
-        _cameraController.update();
+			onPostInit();
+		}
 
-        // Light follows camera.
-        view.scene.light.position = view.camera.position;
+		protected function onPostInit():void
+		{
 
-        // Render scene.
-        view.render();
-    }
-}
+		}
+
+		protected function onPreRender():void
+		{
+
+		}
+
+		protected function onPostRender():void
+		{
+
+		}
+
+		private function enterframeHandler(evt:Event):void
+		{
+			onPreRender();
+			cameraController.update();
+			view.scene.light.position = view.camera.position;
+			view.render();
+			onPostRender();
+		}
+
+		private function stageMouseWheelHandler(evt:MouseEvent):void
+		{
+			cameraController.mouseWheel(evt.delta);
+		}
+
+		private function stageMouseMoveHandler(evt:MouseEvent):void
+		{
+			cameraController.mouseMove(stage.mouseX, stage.mouseY);
+		}
+
+		private function stageMouseDownHandler(evt:MouseEvent):void
+		{
+			cameraController.mouseDown();
+		}
+
+		private function stageMouseUpHandler(evt:MouseEvent):void
+		{
+			cameraController.mouseUp();
+		}
+
+		private function stageKeyDownHandler(evt:KeyboardEvent):void
+		{
+			cameraController.keyDown(evt.keyCode);
+		}
+
+		private function stageKeyUpHandler(evt:KeyboardEvent):void
+		{
+			cameraController.keyUp(evt.keyCode);
+		}
+	}
 }

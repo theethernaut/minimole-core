@@ -8,7 +8,7 @@ import com.li.minimole.core.Object3D;
 public class PointLight extends Object3D
 {
     private var _color:int            = 0xFFFFFF;
-    private var _ambient:Number       = 0.2;
+    private var _ambient:Number       = 1;
     private var _diffuse:Number       = 1;
     private var _specular:Number      = 1;
     private var _concentration:Number = 50;

@@ -65,7 +65,8 @@ public class View3D extends Sprite
         // Init stage 3d.
         stage.stage3Ds[0].addEventListener(Event.CONTEXT3D_CREATE, context3dCreatedHandler);
         stage.stage3Ds[0].requestContext3D();
-        stage.stage3Ds[0].viewPort = new Rectangle(0, 0, _canvasWidth, _canvasHeight);
+        stage.stage3Ds[0].x = 0;
+		stage.stage3Ds[0].y = 0;
     }
 
     private function context3dCreatedHandler(evt:Event):void

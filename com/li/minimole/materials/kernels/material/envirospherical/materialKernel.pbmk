@@ -60,16 +60,16 @@ material kernel EnviroSimpleMaterialKernel
         uvCoord.x = dot(R, xUnit)*0.5;
 
         // Contain uv.
-        //if(R.z >= 0.0) // Bug: R.z not recognized.
-        //{
-        //    uvCoord.x = (uvCoord.x + 1.0)*0.5;
-        //    uvCoord.y = (uvCoord.y + 1.0)*0.5;
-        //}
-        //else
-        //{
-        //    uvCoord.y = (uvCoord.y + 1.0) * 0.5;
-        //    uvCoord.x = (-uvCoord.x) * 0.5 + 1.0;
-        //}
+        if(R.z >= 0.0) // Bug: R.z not recognized.
+        {
+            uvCoord.x = (uvCoord.x + 1.0)*0.5;
+            uvCoord.y = (uvCoord.y + 1.0)*0.5;
+        }
+        else
+        {
+            uvCoord.y = (uvCoord.y + 1.0) * 0.5;
+            uvCoord.x = (-uvCoord.x) * 0.5 + 1.0;
+        }
 
         // Output.
         result = sample(envMap, uvCoord, PB3D_CLAMP);
