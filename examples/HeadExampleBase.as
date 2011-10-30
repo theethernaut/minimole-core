@@ -2,7 +2,7 @@ package examples
 {
 
 	import com.li.minimole.core.Mesh;
-	import com.li.minimole.materials.GouraudColorMaterial;
+	import com.li.minimole.materials.pb3d.PB3DGouraudColorMaterial;
 	import com.li.minimole.parsers.ObjParser;
 
 	import flash.display.BitmapData;
@@ -43,7 +43,7 @@ package examples
         	headSpecularMapTexture = new HeadSpecularMap().bitmapData;
 
 			// load head
-			head = new ObjParser(HeadModel, new GouraudColorMaterial(), 0.2);
+			head = new ObjParser(HeadModel, new PB3DGouraudColorMaterial(), 0.2);
 			view.scene.addChild(head);
 		}
 	}

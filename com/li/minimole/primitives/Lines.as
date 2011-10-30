@@ -1,7 +1,7 @@
 package com.li.minimole.primitives
 {
 import com.li.minimole.core.Mesh;
-import com.li.minimole.materials.MaterialBase;
+import com.li.minimole.materials.pb3d.PB3DMaterialBase;
 
 import flash.geom.Vector3D;
 
@@ -9,7 +9,7 @@ public class Lines extends Mesh
 {
     private var _indexOffset:uint;
 
-    public function Lines(material:MaterialBase)
+    public function Lines(material:PB3DMaterialBase)
     {
         super(material);
 

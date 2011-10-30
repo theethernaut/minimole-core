@@ -1,11 +1,11 @@
 package com.li.minimole.primitives
 {
 import com.li.minimole.core.Mesh;
-import com.li.minimole.materials.MaterialBase;
+import com.li.minimole.materials.pb3d.PB3DMaterialBase;
 
 public class Triangle extends Mesh
 {
-    public function Triangle(material:MaterialBase)
+    public function Triangle(material:PB3DMaterialBase)
     {
         super(material);
 

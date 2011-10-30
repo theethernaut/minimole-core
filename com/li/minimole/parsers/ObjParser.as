@@ -1,7 +1,7 @@
 package com.li.minimole.parsers
 {
 import com.li.minimole.core.Mesh;
-import com.li.minimole.materials.MaterialBase;
+import com.li.minimole.materials.pb3d.PB3DMaterialBase;
 
 import flash.geom.Vector3D;
 import flash.utils.ByteArray;
@@ -23,13 +23,13 @@ public class ObjParser extends Mesh
     private var _scale:Number;
     private var _faceIndex:uint;
 
-    public function ObjParser(definitionClass:Class, material:MaterialBase, scale:Number = 1)
+    public function ObjParser(definitionClass:Class, material:PB3DMaterialBase, scale:Number = 1)
     {
         super(material);
 
         _scale = scale;
 
-        trace("Parsing obj file. ------------------------------------");
+//        trace("Parsing obj file. ------------------------------------");
 
         // Get data as string.
         var definition:String = readClass(definitionClass);
@@ -42,14 +42,14 @@ public class ObjParser extends Mesh
 
         // Split data in to lines and parse all lines.
         var lines:Array = definition.split(LINE_FEED);
-        trace("num lines: " + lines.length);
+//        trace("num lines: " + lines.length);
         var loop:uint = lines.length;
         for(var i:uint = 0; i < loop; ++i)
             parseLine(lines[i]);
 
-        trace("num verts: " + _vertices.length/3);
-        trace("num norms: " + _normals.length/3);
-        trace("num uvs: " + _uvs.length/2);
+//        trace("num verts: " + _vertices.length/3);
+//        trace("num norms: " + _normals.length/3);
+//        trace("num uvs: " + _uvs.length/2);
     }
 
     private function parseLine(line:String):void

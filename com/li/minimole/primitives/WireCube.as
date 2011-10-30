@@ -1,6 +1,6 @@
 package com.li.minimole.primitives
 {
-import com.li.minimole.materials.LineMaterial;
+import com.li.minimole.materials.pb3d.PB3DLineMaterial;
 
 import flash.geom.Vector3D;
 
@@ -20,7 +20,7 @@ public class WireCube extends Lines
     public function WireCube()
     {
         // Init material.
-        var material:LineMaterial = new LineMaterial();
+        var material:PB3DLineMaterial = new PB3DLineMaterial();
         super(material);
 
         // Init lines.

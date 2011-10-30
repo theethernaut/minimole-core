@@ -1,11 +1,11 @@
 package com.li.minimole.primitives
 {
 import com.li.minimole.core.Mesh;
-import com.li.minimole.materials.MaterialBase;
+import com.li.minimole.materials.pb3d.PB3DMaterialBase;
 
 public class Plane extends Mesh
 {
-    public function Plane(material:MaterialBase, width:Number = 1, height:Number = 1)
+    public function Plane(material:PB3DMaterialBase, width:Number = 1, height:Number = 1)
     {
         super(material);
 

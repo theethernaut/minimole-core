@@ -3,7 +3,8 @@ package com.li.minimole.core
 import com.li.minimole.core.math.AABB;
 import com.li.minimole.core.utils.Vector3dUtils;
 import com.li.minimole.debugging.errors.RawBufferEmptyError;
-import com.li.minimole.materials.MaterialBase;
+	import com.li.minimole.materials.MaterialBase;
+	import com.li.minimole.materials.pb3d.PB3DMaterialBase;
 
 import com.li.minimole.primitives.WireCube;
 
@@ -78,7 +79,7 @@ public class Mesh extends Object3D
 
     public function clone():Mesh
     {
-        var clone:Mesh = new Mesh(_material);
+        var clone:Mesh = new Mesh( _material );
         clone.rawColorsBuffer = rawColorsBuffer.concat();
         clone.rawIndexBuffer = rawIndexBuffer.concat();
         clone.rawNormalsBuffer = rawNormalsBuffer.concat();

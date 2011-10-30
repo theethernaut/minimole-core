@@ -1,11 +1,11 @@
 package com.li.minimole.primitives
 {
 import com.li.minimole.core.Mesh;
-import com.li.minimole.materials.MaterialBase;
+import com.li.minimole.materials.pb3d.PB3DMaterialBase;
 
 public class Sphere extends Mesh
 {
-    public function Sphere(material:MaterialBase, radius:Number = 1, segmentsW:uint = 16, segmentsH:uint = 12)
+    public function Sphere(material:PB3DMaterialBase, radius:Number = 1, segmentsW:uint = 16, segmentsH:uint = 12)
     {
         super(material);
 

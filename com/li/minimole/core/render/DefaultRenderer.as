@@ -1,13 +1,13 @@
 package com.li.minimole.core.render
 {
-import com.li.minimole.core.Mesh;
-import com.li.minimole.core.View3D;
-import com.li.minimole.materials.MaterialBase;
 
-import flash.display3D.Context3DBlendFactor;
-import flash.display3D.Context3DTriangleFace;
+	import com.li.minimole.core.Mesh;
+	import com.li.minimole.materials.MaterialBase;
 
-public class DefaultRenderer extends RenderBase
+	import flash.display3D.Context3DBlendFactor;
+	import flash.display3D.Context3DTriangleFace;
+
+	public class DefaultRenderer extends RenderBase
 {
     private var _lastRenderedMaterial:MaterialBase;
 

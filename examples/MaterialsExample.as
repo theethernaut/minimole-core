@@ -1,11 +1,13 @@
 package examples
 {
 
-	import com.li.minimole.materials.EnviroSphericalMaterial;
-	import com.li.minimole.materials.GouraudColorMaterial;
-	import com.li.minimole.materials.PhongBitmapMapMaterial;
-	import com.li.minimole.materials.PhongBitmapMaterial;
-	import com.li.minimole.materials.PhongToonMaterial;
+	import com.li.minimole.materials.agal.AGALBitmapMaterial;
+	import com.li.minimole.materials.agal.AGALColorMaterial;
+	import com.li.minimole.materials.pb3d.PB3DEnviroSphericalMaterial;
+	import com.li.minimole.materials.pb3d.PB3DGouraudColorMaterial;
+	import com.li.minimole.materials.pb3d.PB3DPhongBitmapMapMaterial;
+	import com.li.minimole.materials.pb3d.PB3DPhongBitmapMaterial;
+	import com.li.minimole.materials.pb3d.PB3DPhongToonMaterial;
 
 	import flash.display.BitmapData;
 
@@ -42,19 +44,24 @@ package examples
 			super.onPostInit();
 
 			// load cube map textures
-			envPosX = new EnvPosX().bitmapData;
-			envNegX = new EnvNegX().bitmapData;
-			envPosY = new EnvPosY().bitmapData;
-			envNegY = new EnvNegY().bitmapData;
-			envPosZ = new EnvPosZ().bitmapData;
-			envNegZ = new EnvNegZ().bitmapData;
+//			envPosX = new EnvPosX().bitmapData;
+//			envNegX = new EnvNegX().bitmapData;
+//			envPosY = new EnvPosY().bitmapData;
+//			envNegY = new EnvNegY().bitmapData;
+//			envPosZ = new EnvPosZ().bitmapData;
+//			envNegZ = new EnvNegZ().bitmapData;
 
-			var phongBitmapMaterial:PhongBitmapMaterial = new PhongBitmapMaterial(headTexture);
-			var phongBitmapMapMaterial:PhongBitmapMapMaterial = new PhongBitmapMapMaterial(headTexture, headNormalMapTexture, headSpecularMapTexture);
-			var phongToonMaterial:PhongToonMaterial = new PhongToonMaterial();
-			var enviroSphericalMaterial:EnviroSphericalMaterial = new EnviroSphericalMaterial(envPosX);
+			// PB3D materials
+//			var phongBitmapMaterial:PB3DPhongBitmapMaterial = new PB3DPhongBitmapMaterial(headTexture);
+//			var phongBitmapMapMaterial:PB3DPhongBitmapMapMaterial = new PB3DPhongBitmapMapMaterial(headTexture, headNormalMapTexture, headSpecularMapTexture);
+//			var phongToonMaterial:PB3DPhongToonMaterial = new PB3DPhongToonMaterial();
+//			var enviroSphericalMaterial:PB3DEnviroSphericalMaterial = new PB3DEnviroSphericalMaterial(envPosX);
 
-			head.material = enviroSphericalMaterial;
+			// AGAL materials
+//			var agalBitmapMaterial:AGALBitmapMaterial = new AGALBitmapMaterial( headTexture );
+			var agalColorMaterial:AGALColorMaterial = new AGALColorMaterial( 0x00FF00 );
+
+			head.material = agalColorMaterial;
 		}
 	}
 }

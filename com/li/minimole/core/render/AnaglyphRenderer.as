@@ -2,9 +2,10 @@ package com.li.minimole.core.render
 {
 import com.li.minimole.core.Mesh;
 import com.li.minimole.core.View3D;
+	import com.li.minimole.materials.MaterialBase;
 
-import com.li.minimole.materials.AnaglyphMaterial;
-import com.li.minimole.materials.MaterialBase;
+	import com.li.minimole.materials.pb3d.PB3DAnaglyphMaterial;
+import com.li.minimole.materials.pb3d.PB3DMaterialBase;
 import com.li.minimole.primitives.Plane;
 
 import flash.display3D.Context3DBlendFactor;
@@ -18,7 +19,7 @@ public class AnaglyphRenderer extends RenderBase
     private var _leftTexture:Texture;
     private var _rightTexture:Texture;
     private var _renderPlane:Plane;
-    private var _anaglyphMaterial:AnaglyphMaterial;
+    private var _anaglyphMaterial:PB3DAnaglyphMaterial;
     private var _cameraOriginalPosition:Vector3D;
     private var _lastMaterialRendered:MaterialBase;
 
@@ -30,7 +31,7 @@ public class AnaglyphRenderer extends RenderBase
     public function AnaglyphRenderer()
     {
         // Init render mat.
-        _anaglyphMaterial = new AnaglyphMaterial();
+        _anaglyphMaterial = new PB3DAnaglyphMaterial();
     }
 
     override public function set view(value:View3D):void
@@ -177,7 +178,7 @@ public class AnaglyphRenderer extends RenderBase
         }
     }
 
-    public function get anaglyphMaterial():AnaglyphMaterial
+    public function get anaglyphMaterial():PB3DAnaglyphMaterial
     {
         return _anaglyphMaterial;
     }

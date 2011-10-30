@@ -2,7 +2,7 @@ package com.li.minimole.primitives
 {
 import com.li.minimole.core.Mesh;
 import com.li.minimole.core.utils.Vector3dUtils;
-import com.li.minimole.materials.MaterialBase;
+import com.li.minimole.materials.pb3d.PB3DMaterialBase;
 
 import flash.geom.Point;
 import flash.geom.Vector3D;
@@ -11,7 +11,7 @@ public class Torus extends Mesh
 {
     private var _index:uint;
 
-    public function Torus(material:MaterialBase, radius:Number = 1, tube:Number = 0.4, segmentsR:uint = 64, segmentsT:Number = 48)
+    public function Torus(material:PB3DMaterialBase, radius:Number = 1, tube:Number = 0.4, segmentsR:uint = 64, segmentsT:Number = 48)
     {
         super(material);
 

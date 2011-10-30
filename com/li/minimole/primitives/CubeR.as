@@ -1,14 +1,14 @@
 package com.li.minimole.primitives
 {
 import com.li.minimole.core.Mesh;
-import com.li.minimole.materials.MaterialBase;
+import com.li.minimole.materials.pb3d.PB3DMaterialBase;
 
 /*
     Basic cube with 24 vertices (does not share vertices between sides).
  */
 public class CubeR extends Mesh
 {
-    public function CubeR(material:MaterialBase, width:Number = 1, height:Number = 1, depth:Number = 1)
+    public function CubeR(material:PB3DMaterialBase, width:Number = 1, height:Number = 1, depth:Number = 1)
     {
         super(material);
 
