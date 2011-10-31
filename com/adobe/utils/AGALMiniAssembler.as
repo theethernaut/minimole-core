@@ -122,7 +122,7 @@ package com.adobe.utils
 				
 				// if debug is enabled, output the opcodes
 				if ( debugEnabled )
-					trace( opFound );
+					trace( "opFound: " + opFound );
 				
 				if ( opFound == null )
 				{

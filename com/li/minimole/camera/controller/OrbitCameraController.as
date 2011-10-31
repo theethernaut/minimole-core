@@ -98,7 +98,7 @@ package com.li.minimole.camera.controller
 
 		public function mouseWheel(delta:Number):void
 		{
-			_targetSphericalCoordinates.z += delta * 0.01;
+			_targetSphericalCoordinates.z -= delta * 0.01;
 		}
 
 		public function set azimuth(value:Number):void

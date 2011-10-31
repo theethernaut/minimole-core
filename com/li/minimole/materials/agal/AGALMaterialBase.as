@@ -13,13 +13,13 @@ package com.li.minimole.materials.agal
 			super();
 		}
 
-		protected function initAGAL( vertexAGAL:String, fragmentAGAL:String ):void
+		protected function initAGAL( vertexAGAL:String, fragmentAGAL:String, debugging:Boolean = true ):void
 		{
 			// build shader
 			_isProgramValid = true;
-			var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler();
+			var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler( debugging );
 			vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, vertexAGAL );
-			var fragmentShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler();
+			var fragmentShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler( debugging );
 			fragmentShaderAssembler.assemble( Context3DProgramType.FRAGMENT, fragmentAGAL );
 			_program3d = _context3d.createProgram();
 			try {

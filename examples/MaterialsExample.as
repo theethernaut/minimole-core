@@ -3,6 +3,7 @@ package examples
 
 	import com.li.minimole.materials.agal.AGALBitmapMaterial;
 	import com.li.minimole.materials.agal.AGALColorMaterial;
+	import com.li.minimole.materials.agal.AGALPhongColorMaterial;
 	import com.li.minimole.materials.pb3d.PB3DEnviroSphericalMaterial;
 	import com.li.minimole.materials.pb3d.PB3DGouraudColorMaterial;
 	import com.li.minimole.materials.pb3d.PB3DPhongBitmapMapMaterial;
@@ -59,9 +60,12 @@ package examples
 
 			// AGAL materials
 //			var agalBitmapMaterial:AGALBitmapMaterial = new AGALBitmapMaterial( headTexture );
-			var agalColorMaterial:AGALColorMaterial = new AGALColorMaterial( 0x00FF00 );
+//			var agalColorMaterial:AGALColorMaterial = new AGALColorMaterial( 0x00FF00 );
+			var agalPhongColorMaterial:AGALPhongColorMaterial = new AGALPhongColorMaterial( 0xFF0000 );
 
-			head.material = agalColorMaterial;
+			head.material = agalPhongColorMaterial;
+
+//			head.forceVertexNormalsToTriangleNormals();
 		}
 	}
 }

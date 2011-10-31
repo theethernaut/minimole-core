@@ -46,7 +46,7 @@ package examples
 			addChild(stats);
 
 			// Turn on/off shader debugging.
-			Core3D.instance.debugShaders = true;
+			Core3D.instance.debugShaders = false;
 
 			// Init camera controller.
 			cameraController = new OrbitCameraController(view.camera);
