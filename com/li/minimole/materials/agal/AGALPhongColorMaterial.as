@@ -128,7 +128,7 @@ package com.li.minimole.materials.agal
 
 		public function get specularColor():uint
 		{
-			return _specularColor[0] * 255 << 16 | _diffuseColor[1] * 255 << 8 | _diffuseColor[2] * 255;
+			return _specularColor[0] * 255 << 16 | _specularColor[1] * 255 << 8 | _diffuseColor[2] * 255;
 		}
 
 		public function set specularColor( value:uint ):void

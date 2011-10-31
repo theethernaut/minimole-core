@@ -13,7 +13,7 @@ package com.li.minimole.materials.agal
 			super();
 		}
 
-		protected function initAGAL( vertexAGAL:String, fragmentAGAL:String, debugging:Boolean = true ):void
+		protected function initAGAL( vertexAGAL:String, fragmentAGAL:String, debugging:Boolean = false ):void
 		{
 			// build shader
 			_isProgramValid = true;

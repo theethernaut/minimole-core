@@ -14,12 +14,12 @@ package examples
 		private var HeadTexture:Class;
 
 		// Normal map.
-		[Embed(source="assets/head/Infinite-Level_02_World_SmoothUV.jpg")]
-		private var HeadNormalMap:Class;
+//		[Embed(source="assets/head/Infinite-Level_02_World_SmoothUV.jpg")]
+//		private var HeadNormalMap:Class;
 
 		// Specular map.
-		[Embed(source="assets/head/Map-spec.jpg")]
-		private var HeadSpecularMap:Class;
+//		[Embed(source="assets/head/Map-spec.jpg")]
+//		private var HeadSpecularMap:Class;
 
 		// Model.
 		[Embed (source="assets/head/head.obj", mimeType="application/octet-stream")]
@@ -39,8 +39,8 @@ package examples
 		{
 			// load materials
 			headTexture = new HeadTexture().bitmapData;
-        	headNormalMapTexture = new HeadNormalMap().bitmapData;
-        	headSpecularMapTexture = new HeadSpecularMap().bitmapData;
+//        	headNormalMapTexture = new HeadNormalMap().bitmapData;
+//        	headSpecularMapTexture = new HeadSpecularMap().bitmapData;
 
 			// load head
 			head = new ObjParser(HeadModel, new PB3DGouraudColorMaterial(), 0.2);
