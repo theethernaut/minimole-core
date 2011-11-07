@@ -31,6 +31,8 @@ package com.li.minimole.materials.agal
 		protected var _vertexAGAL:String;
 		protected var _fragmentAGAL:String;
 
+		protected var _currentAGAL:String;
+
 		private var _vertexConstants:Vector.<RegisterConstant>;
 		private var _fragmentConstants:Vector.<RegisterConstant>;
 		private var _vertexAttributes:Vector.<VertexAttribute>;
@@ -46,46 +48,50 @@ package com.li.minimole.materials.agal
 
 		// 1 term
 
-		protected function mov( target:AGALRegister, source1:AGALRegister, comment:String = "" ):String {
-			return "mov " + target + C + source1 + end( comment );
+		public function mov( target:AGALRegister, source1:AGALRegister, comment:String = "" ):void {
+			_currentAGAL += "mov " + target + C + source1 + end( comment );
 		}
 
-		protected function nrm( target:AGALRegister, source1:AGALRegister, comment:String = "" ):String {
-			return "nrm " + target + C + source1 + end( comment );
+		public function nrm( target:AGALRegister, source1:AGALRegister, comment:String = "" ):void {
+			_currentAGAL +=  "nrm " + target + C + source1 + end( comment );
 		}
 
-		protected function sat( target:AGALRegister, source1:AGALRegister, comment:String = "" ):String {
-			return "sat " + target + C + source1 + end( comment );
+		public function sat( target:AGALRegister, source1:AGALRegister, comment:String = "" ):void {
+			_currentAGAL +=  "sat " + target + C + source1 + end( comment );
+		}
+
+		public function neg( target:AGALRegister, source1:AGALRegister, comment:String = "" ):void {
+			_currentAGAL +=  "neg " + target + C + source1 + end( comment );
 		}
 
 		// 2 terms
 
-		protected function pow( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):String {
-			return "pow " + target + C + source1 + C + source2 + end( comment );
+		public function pow( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
+			_currentAGAL +=  "pow " + target + C + source1 + C + source2 + end( comment );
 		}
 
-		protected function add( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):String {
-			return "add " + target + C + source1 + C + source2 + end( comment );
+		public function add( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
+			_currentAGAL +=  "add " + target + C + source1 + C + source2 + end( comment );
 		}
 
-		protected function mul( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):String {
-			return "mul " + target + C + source1 + C + source2 + end( comment );
+		public function mul( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
+			_currentAGAL +=  "mul " + target + C + source1 + C + source2 + end( comment );
 		}
 
-		protected function m44( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):String {
-			return "m44 " + target + C + source1 + C + source2 + end( comment );
+		public function m44( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
+			_currentAGAL +=  "m44 " + target + C + source1 + C + source2 + end( comment );
 		}
 
-		protected function sub( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):String {
-			return "sub " + target + C + source1 + C + source2 + end( comment );
+		public function sub( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
+			_currentAGAL +=  "sub " + target + C + source1 + C + source2 + end( comment );
 		}
 
-		protected function dp3( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):String {
-			return "dp3 " + target + C + source1 + C + source2 + end( comment );
+		public function dp3( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
+			_currentAGAL +=  "dp3 " + target + C + source1 + C + source2 + end( comment );
 		}
 
-		protected function tex( target:AGALRegister, source1:AGALRegister, source2:FragmentSampler, comment:String = "" ):String {
-			return "tex " + target + C + source1 + C + source2 + "<>" + end( comment );
+		public function tex( target:AGALRegister, source1:AGALRegister, source2:FragmentSampler, comment:String = "" ):void {
+			_currentAGAL +=  "tex " + target + C + source1 + C + source2 + "<>" + end( comment );
 		}
 
 		// utils
@@ -139,13 +145,7 @@ package com.li.minimole.materials.agal
 			return temp;
 		}
 
-		public function addFragmentTemporary( temp:FragmentTemporary ):FragmentTemporary {
-
-			_fragTemps.push( temp );
-			return temp;
-		}
-
-		public function releaseTemporary( temp:Temporary ):void {
+		public function releaseTemporary( temp:Temporary ):void { // TODO
 			if( temp is VertexTemporary ) {
 				_vertTemps.splice( temp.registerIndex, 1 );
 			}

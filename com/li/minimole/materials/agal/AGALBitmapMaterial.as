@@ -21,12 +21,16 @@ package com.li.minimole.materials.agal
 			var texture:FragmentSampler = addFragmentSampler( new FragmentSampler( "texture", bitmap ) );
 			var interpolatedUvs:Varying = addVarying( new Varying( "interpolatedUvs" ) );
 
-			_vertexAGAL += mov( interpolatedUvs, vertexUvs );
-			_vertexAGAL += m44( op, vertexPositions, mvc );
+			// vertex
+			_currentAGAL = "";
+			mov( interpolatedUvs, vertexUvs );
+			m44( op, vertexPositions, mvc );
+			vertexAGAL = _currentAGAL;
 
-			_fragmentAGAL += tex( oc, interpolatedUvs, texture );
-
-			setAGAL( _vertexAGAL, _fragmentAGAL );
+			// fragment
+			_currentAGAL = "";
+			tex( oc, interpolatedUvs, texture );
+			fragmentAGAL = _currentAGAL;
 		}
 	}
 }

@@ -21,8 +21,15 @@ package com.li.minimole.materials.agal
 			var fragmentColor:VectorRegisterConstant = addFragmentConstant( new VectorRegisterConstant( "fragmentColor", rgb.r / 255, rgb.g / 255, rgb.b / 255, rgb.a ) ) as VectorRegisterConstant; // fc0
 			fragmentColor.setColorComponentNames();
 
-			_vertexAGAL += m44( op, vertexPositions, mvc );
-			_fragmentAGAL += mov( oc, fragmentColor );
+			// vertex
+			_currentAGAL = "";
+			m44( op, vertexPositions, mvc );
+			vertexAGAL = _currentAGAL;
+
+			// fragment
+			_currentAGAL = "";
+			mov( oc, fragmentColor );
+			fragmentAGAL = _currentAGAL;
 
 			setAGAL( _vertexAGAL, _fragmentAGAL );
 		}

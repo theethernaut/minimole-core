@@ -3,6 +3,8 @@ package com.li.minimole.materials.agal
 
 	import com.li.minimole.core.utils.ColorUtils;
 	import com.li.minimole.core.vo.RGB;
+	import com.li.minimole.materials.agal.methods.AGALPhongDiffuseMethod;
+	import com.li.minimole.materials.agal.methods.AGALPhongSpecularMethod;
 	import com.li.minimole.materials.agal.vo.mappings.RegisterMapping;
 	import com.li.minimole.materials.agal.vo.registers.FragmentTemporary;
 	import com.li.minimole.materials.agal.vo.registers.MatrixRegisterConstant;
@@ -51,44 +53,46 @@ package com.li.minimole.materials.agal
 			var interpolatedNormals:Varying = addVarying( new Varying( "interpolatedNormals" ) );
 
 			// vertex agal
+			_currentAGAL = "";
 			var sceneSpaceVertexPosition:Temporary = addTemporary( new VertexTemporary( "sceneSpaceVertexPosition" ) );
-			_vertexAGAL += m44( sceneSpaceVertexPosition, vertexPositions, transform, "calculate vertex positions in scene space" );
-			_vertexAGAL += sub( interpolatedDirToLight, lightPosition, sceneSpaceVertexPosition, "interpolate direction to light" );
-			_vertexAGAL += sub( interpolatedDirToCamera, cameraPosition, sceneSpaceVertexPosition, "interpolate direction to camera" );
-			_vertexAGAL += m44( interpolatedNormals, vertexNormals, reducedTransform, "interpolate normal positions in scene space (ignoring position)" );
-			_vertexAGAL += m44( op, vertexPositions, mvc, "output position to clip space" );
+			m44( sceneSpaceVertexPosition, vertexPositions, transform, "calculate vertex positions in scene space" );
+			sub( interpolatedDirToLight, lightPosition, sceneSpaceVertexPosition, "interpolate direction to light" );
+			sub( interpolatedDirToCamera, cameraPosition, sceneSpaceVertexPosition, "interpolate direction to camera" );
+			m44( interpolatedNormals, vertexNormals, reducedTransform, "interpolate normal positions in scene space (ignoring position)" );
+			m44( op, vertexPositions, mvc, "output position to clip space" );
+			vertexAGAL = _currentAGAL;
 
 			// fragment agal
+			_currentAGAL = "";
 			// normalize input
 			var normalizedDirToLight:Temporary = addTemporary( new FragmentTemporary( "normalizedDirToLight" ) );
-			_fragmentAGAL += nrm( normalizedDirToLight.xyz, interpolatedDirToLight, "normalize dir to light" );
+			nrm( normalizedDirToLight.xyz, interpolatedDirToLight, "normalize dir to light" );
 			var normalizedDirToCamera:Temporary = addTemporary( new FragmentTemporary( "normalizedDirToCamera" ) );
-			_fragmentAGAL += nrm( normalizedDirToCamera.xyz, interpolatedDirToCamera, "normalize dir to camera" );
+			nrm( normalizedDirToCamera.xyz, interpolatedDirToCamera, "normalize dir to camera" );
 			var normalizedNormal:Temporary = addTemporary( new FragmentTemporary( "normalizedNormal" ) );
-			_fragmentAGAL += nrm( normalizedNormal.xyz, interpolatedNormals, "normalize normals" );
+			nrm( normalizedNormal.xyz, interpolatedNormals, "normalize normals" );
 			// calculate diffuse term
-			var diffuseTerm:Temporary = addTemporary( new FragmentTemporary( "diffuseTerm" ) );
-			_fragmentAGAL += dp3( diffuseTerm.x, normalizedNormal.xyz, normalizedDirToLight.xyz, "find projection of direction to light on normal" );
-			_fragmentAGAL += sat( diffuseTerm.x, diffuseTerm.x, "ignore negative values" );
-			_fragmentAGAL += mul( diffuseTerm.x, diffuseTerm.x, lightProperties.y, "multiply projection of direction to light on normal with light's diffuse amoun" );
-			_fragmentAGAL += add( diffuseTerm.x, diffuseTerm.x, lightProperties.x, "add light's ambient amount" );
-			_fragmentAGAL += mul( diffuseTerm.xyz, diffuseTerm.xxx, diffuseColor.xyz, "multiply by material's diffuse color" );
+			var diffuseTerm:Temporary = new AGALPhongDiffuseMethod(
+					this,
+					normalizedNormal,
+					normalizedDirToLight,
+					lightProperties,
+					diffuseColor
+			).diffuseTerm;
 			// calculate specular term
-			var specularTerm:Temporary = addTemporary( new FragmentTemporary( "specularTerm" ) );
-			_fragmentAGAL += add( specularTerm.xyz, normalizedDirToLight.xyz, normalizedDirToCamera.xyz, "evaluate half vector" );
-			_fragmentAGAL += nrm( specularTerm.xyz, specularTerm.xyz, "normalize half vector" );
-			_fragmentAGAL += dp3( specularTerm.x, normalizedNormal.xyz, specularTerm.xyz, "find projection of half vector on normal" );
-			_fragmentAGAL += sat( specularTerm.x, specularTerm.x, "ignore negative values" );
-			_fragmentAGAL += pow( specularTerm.x, specularTerm.x, lightProperties.w, "apply gloss" );
-			_fragmentAGAL += mul( specularTerm.x, specularTerm.x, lightProperties.z, "multiply with specular amount" );
-			_fragmentAGAL += mul( specularTerm.xyz, specularTerm.xxx, specularColor, "multiply with specular color" );
+			var specularTerm:Temporary = new AGALPhongSpecularMethod(
+					this,
+					normalizedNormal,
+					normalizedDirToLight,
+					normalizedDirToCamera,
+					lightProperties,
+					specularColor
+			).specularTerm;
 			// output
 			var combinedTerms:Temporary = addTemporary( new FragmentTemporary( "combinedTerms" ) );
-			_fragmentAGAL += add( combinedTerms.xyz, diffuseTerm.xyz, specularTerm.xyz, "combine diffuse + specular" );
-			_fragmentAGAL += mov( oc, combinedTerms.xyz );
-
-			setAGAL( _vertexAGAL, _fragmentAGAL );
-			
+			add( combinedTerms.xyz, diffuseTerm.xyz, specularTerm.xyz, "combine diffuse + specular" );
+			mov( oc, combinedTerms.xyz );
+			fragmentAGAL = _currentAGAL;
 		}
 	}
 }

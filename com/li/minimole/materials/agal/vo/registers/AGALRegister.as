@@ -35,33 +35,39 @@ package com.li.minimole.materials.agal.vo.registers
 		// -----------------------
 
 		public function get w():AGALRegister {
-			registerComps = ".w";
-			return cloneRegister();
+			var clone:AGALRegister = cloneRegister();
+			clone.registerComps = ".w";
+			return clone;
 		}
 
 		public function get z():AGALRegister {
-			registerComps = ".z";
-			return cloneRegister();
+			var clone:AGALRegister = cloneRegister();
+			clone.registerComps = ".z";
+			return clone;
 		}
 
 		public function get xxx():AGALRegister {
-			registerComps = ".xxx";
-			return cloneRegister();
+			var clone:AGALRegister = cloneRegister();
+			clone.registerComps = ".xxx";
+			return clone;
 		}
 
 		public function get y():AGALRegister {
-			registerComps = ".y";
-			return cloneRegister();
+			var clone:AGALRegister = cloneRegister();
+			clone.registerComps = ".y";
+			return clone;
 		}
 
 		public function get x():AGALRegister {
-			registerComps = ".x";
-			return cloneRegister();
+			var clone:AGALRegister = cloneRegister();
+			clone.registerComps = ".x";
+			return clone;
 		}
 
 		public function get xyz():AGALRegister {
-			registerComps = ".xyz";
-			return cloneRegister();
+			var clone:AGALRegister = cloneRegister();
+			clone.registerComps = ".xyz";
+			return clone;
 		}
 	}
 }
