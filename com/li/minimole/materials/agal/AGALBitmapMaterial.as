@@ -1,12 +1,16 @@
 package com.li.minimole.materials.agal
 {
 
-	import com.li.minimole.materials.agal.vo.mappings.RegisterMapping;
-	import com.li.minimole.materials.agal.vo.registers.FragmentSampler;
-	import com.li.minimole.materials.agal.vo.registers.MatrixRegisterConstant;
-	import com.li.minimole.materials.agal.vo.registers.RegisterConstant;
-	import com.li.minimole.materials.agal.vo.registers.Varying;
-	import com.li.minimole.materials.agal.vo.registers.VertexAttribute;
+	import com.li.minimole.materials.agal.data.TextureDimensionType;
+	import com.li.minimole.materials.agal.data.TextureFilteringType;
+	import com.li.minimole.materials.agal.data.TextureMipMappingType;
+	import com.li.minimole.materials.agal.data.TextureRepeatType;
+	import com.li.minimole.materials.agal.mappings.RegisterMapping;
+	import com.li.minimole.materials.agal.registers.FragmentSampler;
+	import com.li.minimole.materials.agal.registers.MatrixRegisterConstant;
+	import com.li.minimole.materials.agal.registers.RegisterConstant;
+	import com.li.minimole.materials.agal.registers.Varying;
+	import com.li.minimole.materials.agal.registers.VertexAttribute;
 
 	import flash.display.BitmapData;
 
@@ -14,11 +18,13 @@ package com.li.minimole.materials.agal
 	{
 		public function AGALBitmapMaterial( bitmap:BitmapData ) {
 			super();
-			
+
+			var texFlags:Array = [ TextureDimensionType.TYPE_2D, TextureMipMappingType.MIP_NONE, TextureFilteringType.LINEAR, TextureRepeatType.REPEAT ];
+			var texture:FragmentSampler = addFragmentSampler( new FragmentSampler( "texture", bitmap, texFlags ) );
+
 			var vertexPositions:VertexAttribute = addVertexAttribute( new VertexAttribute( "vertexPositions", VertexAttribute.POSITIONS ) ); // va0
 			var vertexUvs:VertexAttribute = addVertexAttribute( new VertexAttribute( "vertexUvs", VertexAttribute.UVS ) ); // va1
 			var mvc:RegisterConstant = addVertexConstant( new MatrixRegisterConstant( "modelViewProjection", null, new RegisterMapping( RegisterMapping.MVC_MAPPING ) ) ); // vc0
-			var texture:FragmentSampler = addFragmentSampler( new FragmentSampler( "texture", bitmap ) );
 			var interpolatedUvs:Varying = addVarying( new Varying( "interpolatedUvs" ) );
 
 			// vertex

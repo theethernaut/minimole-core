@@ -4,20 +4,22 @@ package com.li.minimole.materials.agal
 	import com.adobe.utils.AGALMiniAssembler;
 	import com.li.minimole.core.Core3D;
 	import com.li.minimole.core.Mesh;
+	import com.li.minimole.core.utils.TextureUtils;
 	import com.li.minimole.debugging.logging.Log;
 	import com.li.minimole.lights.PointLight;
 	import com.li.minimole.materials.MaterialBase;
-	import com.li.minimole.materials.agal.vo.mappings.RegisterMapping;
-	import com.li.minimole.materials.agal.vo.registers.AGALRegister;
-	import com.li.minimole.materials.agal.vo.registers.FragmentTemporary;
-	import com.li.minimole.materials.agal.vo.registers.Temporary;
-	import com.li.minimole.materials.agal.vo.registers.VertexAttribute;
-	import com.li.minimole.materials.agal.vo.registers.MatrixRegisterConstant;
-	import com.li.minimole.materials.agal.vo.registers.RegisterConstant;
-	import com.li.minimole.materials.agal.vo.registers.VectorRegisterConstant;
-	import com.li.minimole.materials.agal.vo.registers.FragmentSampler;
-	import com.li.minimole.materials.agal.vo.registers.Varying;
-	import com.li.minimole.materials.agal.vo.registers.VertexTemporary;
+	import com.li.minimole.materials.agal.data.TextureMipMappingType;
+	import com.li.minimole.materials.agal.mappings.RegisterMapping;
+	import com.li.minimole.materials.agal.registers.AGALRegister;
+	import com.li.minimole.materials.agal.registers.FragmentTemporary;
+	import com.li.minimole.materials.agal.registers.Temporary;
+	import com.li.minimole.materials.agal.registers.VertexAttribute;
+	import com.li.minimole.materials.agal.registers.MatrixRegisterConstant;
+	import com.li.minimole.materials.agal.registers.RegisterConstant;
+	import com.li.minimole.materials.agal.registers.VectorRegisterConstant;
+	import com.li.minimole.materials.agal.registers.FragmentSampler;
+	import com.li.minimole.materials.agal.registers.Varying;
+	import com.li.minimole.materials.agal.registers.VertexTemporary;
 
 	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DTextureFormat;
@@ -53,48 +55,65 @@ package com.li.minimole.materials.agal
 		}
 
 		public function nrm( target:AGALRegister, source1:AGALRegister, comment:String = "" ):void {
-			_currentAGAL +=  "nrm " + target + C + source1 + end( comment );
+			_currentAGAL += "nrm " + target + C + source1 + end( comment );
 		}
 
 		public function sat( target:AGALRegister, source1:AGALRegister, comment:String = "" ):void {
-			_currentAGAL +=  "sat " + target + C + source1 + end( comment );
+			_currentAGAL += "sat " + target + C + source1 + end( comment );
 		}
 
 		public function neg( target:AGALRegister, source1:AGALRegister, comment:String = "" ):void {
-			_currentAGAL +=  "neg " + target + C + source1 + end( comment );
+			_currentAGAL += "neg " + target + C + source1 + end( comment );
 		}
 
 		// 2 terms
 
 		public function pow( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
-			_currentAGAL +=  "pow " + target + C + source1 + C + source2 + end( comment );
+			_currentAGAL += "pow " + target + C + source1 + C + source2 + end( comment );
 		}
 
 		public function add( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
-			_currentAGAL +=  "add " + target + C + source1 + C + source2 + end( comment );
+			_currentAGAL += "add " + target + C + source1 + C + source2 + end( comment );
 		}
 
 		public function mul( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
-			_currentAGAL +=  "mul " + target + C + source1 + C + source2 + end( comment );
+			_currentAGAL += "mul " + target + C + source1 + C + source2 + end( comment );
 		}
 
 		public function m44( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
-			_currentAGAL +=  "m44 " + target + C + source1 + C + source2 + end( comment );
+			_currentAGAL += "m44 " + target + C + source1 + C + source2 + end( comment );
 		}
 
 		public function sub( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
-			_currentAGAL +=  "sub " + target + C + source1 + C + source2 + end( comment );
+			_currentAGAL += "sub " + target + C + source1 + C + source2 + end( comment );
 		}
 
 		public function dp3( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
-			_currentAGAL +=  "dp3 " + target + C + source1 + C + source2 + end( comment );
+			_currentAGAL += "dp3 " + target + C + source1 + C + source2 + end( comment );
 		}
 
 		public function tex( target:AGALRegister, source1:AGALRegister, source2:FragmentSampler, comment:String = "" ):void {
-			_currentAGAL +=  "tex " + target + C + source1 + C + source2 + "<>" + end( comment );
+			_currentAGAL += "tex " + target + C + source1 + C + source2 + processSamplerFlags( source2 ) + end( comment );
 		}
 
 		// utils
+
+		public function comment( msg:String ):void {
+			_currentAGAL += end( msg );
+		}
+
+		private function processSamplerFlags( sampler:FragmentSampler ):String {
+			var flagsStr:String = "<";
+			var len:uint = sampler.flags.length;
+			for( var i:uint; i < len; ++i ) {
+				flagsStr += sampler.flags[ i ];
+				if( i != len - 1 ) {
+					flagsStr += ", ";
+				}
+			}
+			flagsStr += ">";
+			return flagsStr;
+		}
 
 		private function end( comment:String ):String {
 			if( comment == "" ) {
@@ -203,7 +222,11 @@ package com.li.minimole.materials.agal
 				if( sampler.value != null ) {
 					if( sampler.texture == null || _samplersDirty ) {
 						sampler.texture = _context3d.createTexture( sampler.value.width, sampler.value.height, Context3DTextureFormat.BGRA, false );
-						sampler.texture.uploadFromBitmapData( sampler.value );
+						if( sampler.flags.indexOf( TextureMipMappingType.MIP_NEAREST ) != -1 ) {
+							TextureUtils.generateMipMaps( sampler.texture, sampler.value );
+						}
+						else
+							sampler.texture.uploadFromBitmapData( sampler.value );
 					}
 				}
 				else {
@@ -327,11 +350,16 @@ package com.li.minimole.materials.agal
 					constant.mapping.target();
 				}
 				else if( constant.mapping.type == RegisterMapping.OSCILLATOR_MAPPING ) {
+					var vec:VectorRegisterConstant = VectorRegisterConstant( constant );
+					var rangeX:Number = vec.compRanges[ 0 ].y - vec.compRanges[ 0 ].x;
+					var rangeY:Number = vec.compRanges[ 1 ].y - vec.compRanges[ 1 ].x;
+					var rangeZ:Number = vec.compRanges[ 2 ].y - vec.compRanges[ 2 ].x;
+					var rangeW:Number = vec.compRanges[ 3 ].y - vec.compRanges[ 3 ].x;
 					var values:Vector.<Number> = constant.mapping.target();
-					constant.value[ 0 ] = values[ 0 ];
-					constant.value[ 1 ] = values[ 1 ];
-					constant.value[ 2 ] = values[ 2 ];
-					constant.value[ 3 ] = values[ 3 ];
+					constant.value[ 0 ] = vec.compRanges[ 0 ].x + rangeX * 0.5 + 0.5 * values[ 0 ] * rangeX;
+					constant.value[ 1 ] = vec.compRanges[ 1 ].x + rangeY * 0.5 + 0.5 * values[ 1 ] * rangeY;
+					constant.value[ 2 ] = vec.compRanges[ 2 ].x + rangeZ * 0.5 + 0.5 * values[ 2 ] * rangeZ;
+					constant.value[ 3 ] = vec.compRanges[ 3 ].x + rangeW * 0.5 + 0.5 * values[ 3 ] * rangeW;
 				}
 				else {
 					throw new Error( "Register mappings of type " + constant.mapping.type + " are not yet supported." );
@@ -339,8 +367,7 @@ package com.li.minimole.materials.agal
 			}
 		}
 
-		private function buildAGALProgram( vertexAGAL:String, fragmentAGAL:String, debugging:Boolean = false ):Boolean
-		{
+		private function buildAGALProgram( vertexAGAL:String, fragmentAGAL:String, debugging:Boolean = false ):Boolean {
 			// build shader
 			_isProgramValid = true;
 

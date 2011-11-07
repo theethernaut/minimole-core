@@ -1,4 +1,4 @@
-package com.li.minimole.materials.agal.vo.registers
+package com.li.minimole.materials.agal.registers
 {
 
 	public class FragmentTemporary extends Temporary

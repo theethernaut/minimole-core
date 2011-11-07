@@ -1,18 +1,22 @@
 package com.li.minimole.materials.agal
 {
 
+	import com.li.minimole.materials.agal.data.TextureDimensionType;
+	import com.li.minimole.materials.agal.data.TextureFilteringType;
+	import com.li.minimole.materials.agal.data.TextureMipMappingType;
+	import com.li.minimole.materials.agal.data.TextureRepeatType;
 	import com.li.minimole.materials.agal.methods.AGALPhongDiffuseMethod;
 	import com.li.minimole.materials.agal.methods.AGALPhongSpecularMethod;
-	import com.li.minimole.materials.agal.vo.mappings.RegisterMapping;
-	import com.li.minimole.materials.agal.vo.registers.FragmentSampler;
-	import com.li.minimole.materials.agal.vo.registers.FragmentTemporary;
-	import com.li.minimole.materials.agal.vo.registers.MatrixRegisterConstant;
-	import com.li.minimole.materials.agal.vo.registers.RegisterConstant;
-	import com.li.minimole.materials.agal.vo.registers.Temporary;
-	import com.li.minimole.materials.agal.vo.registers.Varying;
-	import com.li.minimole.materials.agal.vo.registers.VectorRegisterConstant;
-	import com.li.minimole.materials.agal.vo.registers.VertexAttribute;
-	import com.li.minimole.materials.agal.vo.registers.VertexTemporary;
+	import com.li.minimole.materials.agal.mappings.RegisterMapping;
+	import com.li.minimole.materials.agal.registers.FragmentSampler;
+	import com.li.minimole.materials.agal.registers.FragmentTemporary;
+	import com.li.minimole.materials.agal.registers.MatrixRegisterConstant;
+	import com.li.minimole.materials.agal.registers.RegisterConstant;
+	import com.li.minimole.materials.agal.registers.Temporary;
+	import com.li.minimole.materials.agal.registers.Varying;
+	import com.li.minimole.materials.agal.registers.VectorRegisterConstant;
+	import com.li.minimole.materials.agal.registers.VertexAttribute;
+	import com.li.minimole.materials.agal.registers.VertexTemporary;
 
 	import flash.display.BitmapData;
 	import flash.geom.Point;
@@ -28,9 +32,10 @@ package com.li.minimole.materials.agal
 			var vertexUvs:VertexAttribute = addVertexAttribute( new VertexAttribute( "vertexUvs", VertexAttribute.UVS ) ); // va1
 
 			// samplers
-			var textureSampler:FragmentSampler = addFragmentSampler( new FragmentSampler( "textureSampler", texture ) ); // fs0
-			var normalMapSampler:FragmentSampler = addFragmentSampler( new FragmentSampler( "normalMapSampler", normalMap ) ); // fs1
-			var specularMapSampler:FragmentSampler = addFragmentSampler( new FragmentSampler( "specularMapSampler", specularMap ) ); // fs2
+			var texFlags:Array = [ TextureDimensionType.TYPE_2D, TextureMipMappingType.MIP_NEAREST, TextureFilteringType.LINEAR, TextureRepeatType.REPEAT ];
+			var textureSampler:FragmentSampler = addFragmentSampler( new FragmentSampler( "textureSampler", texture, texFlags ) ); // fs0
+			var normalMapSampler:FragmentSampler = addFragmentSampler( new FragmentSampler( "normalMapSampler", normalMap, texFlags ) ); // fs1
+			var specularMapSampler:FragmentSampler = addFragmentSampler( new FragmentSampler( "specularMapSampler", specularMap, texFlags ) ); // fs2
 
 			// vertex constants
 			var mvc:RegisterConstant = addVertexConstant( new MatrixRegisterConstant( "modelViewProjection", null, new RegisterMapping( RegisterMapping.MVC_MAPPING ) ) ); // vc0 to vc3

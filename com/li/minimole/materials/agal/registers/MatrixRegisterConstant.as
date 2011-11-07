@@ -1,4 +1,4 @@
-package com.li.minimole.materials.agal.vo.registers
+package com.li.minimole.materials.agal.registers
 {
 
 	import flash.geom.Matrix3D;

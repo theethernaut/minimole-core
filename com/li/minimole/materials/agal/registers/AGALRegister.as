@@ -1,4 +1,4 @@
-package com.li.minimole.materials.agal.vo.registers
+package com.li.minimole.materials.agal.registers
 {
 
 	public class AGALRegister
@@ -55,6 +55,12 @@ package com.li.minimole.materials.agal.vo.registers
 		public function get y():AGALRegister {
 			var clone:AGALRegister = cloneRegister();
 			clone.registerComps = ".y";
+			return clone;
+		}
+
+		public function get xy():AGALRegister {
+			var clone:AGALRegister = cloneRegister();
+			clone.registerComps = ".xy";
 			return clone;
 		}
 

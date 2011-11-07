@@ -2,9 +2,9 @@ package com.li.minimole.materials.agal.methods
 {
 
 	import com.li.minimole.materials.agal.AGALMaterial;
-	import com.li.minimole.materials.agal.vo.registers.FragmentTemporary;
-	import com.li.minimole.materials.agal.vo.registers.Temporary;
-	import com.li.minimole.materials.agal.vo.registers.VectorRegisterConstant;
+	import com.li.minimole.materials.agal.registers.FragmentTemporary;
+	import com.li.minimole.materials.agal.registers.Temporary;
+	import com.li.minimole.materials.agal.registers.VectorRegisterConstant;
 
 	public class AGALPhongSpecularMethod extends AGALMethod
 	{

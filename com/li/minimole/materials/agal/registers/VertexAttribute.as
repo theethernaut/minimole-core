@@ -1,7 +1,7 @@
-package com.li.minimole.materials.agal.vo.registers
+package com.li.minimole.materials.agal.registers
 {
 
-	import com.li.minimole.materials.agal.vo.registers.AGALRegister;
+	import com.li.minimole.materials.agal.registers.AGALRegister;
 
 	import flash.display3D.Context3DVertexBufferFormat;
 
