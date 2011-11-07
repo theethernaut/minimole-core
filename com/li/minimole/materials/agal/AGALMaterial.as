@@ -222,14 +222,12 @@ package com.li.minimole.materials.agal
 
 			// update program
 			if( _agalDirty ) {
-				trace( "building program..." );
 				if( !buildAGALProgram( _vertexAGAL, _fragmentAGAL ) ) {
 					return;
 				}
 				_agalDirty = false;
 			}
 			if( !_isProgramValid ) {
-				trace( "invalid program" );
 				return;
 			}
 			_context3d.setProgram( _program3d );

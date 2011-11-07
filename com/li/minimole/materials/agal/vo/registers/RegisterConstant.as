@@ -2,7 +2,6 @@ package com.li.minimole.materials.agal.vo.registers
 {
 
 	import com.li.minimole.materials.agal.vo.mappings.RegisterMapping;
-	import com.li.minimole.materials.agal.vo.registers.AGALRegister;
 
 	public class RegisterConstant extends AGALRegister
 	{
