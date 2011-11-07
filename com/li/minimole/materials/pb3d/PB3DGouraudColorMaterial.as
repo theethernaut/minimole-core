@@ -1,28 +1,19 @@
 package com.li.minimole.materials.pb3d
 {
 
-	import com.li.minimole.materials.*;
 	import com.li.minimole.core.Core3D;
-import com.li.minimole.core.Mesh;
+	import com.li.minimole.core.Mesh;
+	import com.li.minimole.core.utils.ColorUtils;
+	import com.li.minimole.core.utils.VectorUtils;
+	import com.li.minimole.core.vo.RGB;
+	import com.li.minimole.lights.PointLight;
+	import com.li.minimole.materials.*;
 
-import com.li.minimole.core.utils.ColorUtils;
-import com.li.minimole.core.utils.PB3DUtil;
+	import flash.display3D.Context3DProgramType;
+	import flash.display3D.Context3DVertexBufferFormat;
+	import flash.geom.Matrix3D;
 
-import com.li.minimole.core.utils.VectorUtils;
-import com.li.minimole.core.vo.RGB;
-import com.li.minimole.lights.PointLight;
-
-import flash.display3D.Context3DProgramType;
-import flash.display3D.Context3DTriangleFace;
-import flash.display3D.Context3DVertexBufferFormat;
-
-import com.adobe.pixelBender3D.*;
-import com.adobe.pixelBender3D.utils.*;
-
-import flash.geom.Matrix3D;
-import flash.geom.Vector3D;
-
-/*
+	/*
     Color material with gouraud shading.
  */
 public class PB3DGouraudColorMaterial extends PB3DMaterialBase implements IColorMaterial

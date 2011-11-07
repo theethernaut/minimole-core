@@ -13,7 +13,7 @@ public class PerspectiveLens
     private var _invProjectionMatrix:Matrix3D; // Inverse of projection matrix.
     private var _aspectRatio:Number = 1; // Should always be set to viewWidth/viewHeight.
     private var _zNear:Number = 0.1; // Distance to near frustum plane.
-    private var _zFar:Number = 5; // Distance to far frustum plane.
+    private var _zFar:Number = 50; // Distance to far frustum plane.
     private var _projectionMatrixDirty:Boolean;
     private var _inverseSuccesful:Boolean;
 

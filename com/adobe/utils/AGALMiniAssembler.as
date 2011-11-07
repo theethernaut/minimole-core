@@ -127,7 +127,7 @@ package com.adobe.utils
 				if ( opFound == null )
 				{
 					if ( line.length >= 3 )
-						trace( "warning: bad line "+i+": "+lines[i] );
+						_error = "error: bad line "+i+": "+lines[i];
 					continue;
 				}
 				
@@ -398,7 +398,9 @@ package com.adobe.utils
 			{
 				_error += "\n  at line " + i + " " + lines[i];
 				agalcode.length = 0;
-				trace( _error );
+//				trace( _error );
+
+				throw new Error( _error );
 			}
 			
 			// trace the bytecode bytes if debugging is enabled

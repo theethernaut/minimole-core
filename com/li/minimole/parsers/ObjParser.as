@@ -1,7 +1,8 @@
 package com.li.minimole.parsers
 {
 import com.li.minimole.core.Mesh;
-import com.li.minimole.materials.pb3d.PB3DMaterialBase;
+	import com.li.minimole.materials.MaterialBase;
+	import com.li.minimole.materials.pb3d.PB3DMaterialBase;
 
 import flash.geom.Vector3D;
 import flash.utils.ByteArray;
@@ -23,7 +24,7 @@ public class ObjParser extends Mesh
     private var _scale:Number;
     private var _faceIndex:uint;
 
-    public function ObjParser(definitionClass:Class, material:PB3DMaterialBase, scale:Number = 1)
+    public function ObjParser(definitionClass:Class, material:MaterialBase, scale:Number = 1)
     {
         super(material);
 

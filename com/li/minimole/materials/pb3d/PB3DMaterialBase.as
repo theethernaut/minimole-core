@@ -3,8 +3,6 @@ package com.li.minimole.materials.pb3d
 
 	import com.adobe.pixelBender3D.*;
 	import com.adobe.pixelBender3D.utils.*;
-	import com.li.minimole.core.Core3D;
-	import com.li.minimole.core.utils.PB3DUtil;
 	import com.li.minimole.materials.MaterialBase;
 
 	import flash.utils.ByteArray;
@@ -35,9 +33,6 @@ package com.li.minimole.materials.pb3d
 			_vertexRegisterMap = programs.vertexProgram.registers;
 			_fragmentRegisterMap = programs.fragmentProgram.registers;
 			_parameterBufferHelper = new ProgramConstantsHelper( _context3d, _vertexRegisterMap, _fragmentRegisterMap );
-
-			if( Core3D.instance.debugShaders )
-				PB3DUtil.traceAgalProgramPair( programs );
 
 			// build shader.
 			_program3d.upload( programs.vertexProgram.byteCode, programs.fragmentProgram.byteCode );

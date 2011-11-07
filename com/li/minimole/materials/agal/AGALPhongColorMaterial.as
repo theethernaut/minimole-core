@@ -1,140 +1,94 @@
 package com.li.minimole.materials.agal
 {
 
-	import com.li.minimole.core.Core3D;
-	import com.li.minimole.core.Mesh;
 	import com.li.minimole.core.utils.ColorUtils;
-	import com.li.minimole.core.utils.VectorUtils;
 	import com.li.minimole.core.vo.RGB;
-	import com.li.minimole.lights.PointLight;
-	import com.li.minimole.materials.IColorMaterial;
+	import com.li.minimole.materials.agal.vo.mappings.RegisterMapping;
+	import com.li.minimole.materials.agal.vo.registers.FragmentTemporary;
+	import com.li.minimole.materials.agal.vo.registers.MatrixRegisterConstant;
+	import com.li.minimole.materials.agal.vo.registers.RegisterConstant;
+	import com.li.minimole.materials.agal.vo.registers.Temporary;
+	import com.li.minimole.materials.agal.vo.registers.Varying;
+	import com.li.minimole.materials.agal.vo.registers.VectorRegisterConstant;
+	import com.li.minimole.materials.agal.vo.registers.VertexAttribute;
+	import com.li.minimole.materials.agal.vo.registers.VertexTemporary;
 
-	import flash.display3D.Context3DProgramType;
-	import flash.display3D.Context3DVertexBufferFormat;
+	import flash.geom.Point;
 
-	import flash.geom.Matrix3D;
-
-	public class AGALPhongColorMaterial extends AGALMaterialBase implements IColorMaterial
+	public class AGALPhongColorMaterial extends AGALMaterial
 	{
-		private var _diffuseColor:Vector.<Number> = Vector.<Number>( [1.0, 1.0, 1.0, 1.0] );
-		private var _specularColor:Vector.<Number>;
-		private var _lightProperties:Vector.<Number>;
-
-		public function AGALPhongColorMaterial( color:uint = 0xFFFFFF )
-		{
+		public function AGALPhongColorMaterial( color:uint = 0xFFFFFF ) {
+			
 			super();
+			
+			var rgb:RGB = ColorUtils.hexToRGB( color );
 
-			this.color = color;
+			// attributes
+			var vertexPositions:VertexAttribute = addVertexAttribute( new VertexAttribute( "vertexPositions", VertexAttribute.POSITIONS ) ); // va0
+			var vertexNormals:VertexAttribute = addVertexAttribute( new VertexAttribute( "vertexNormals", VertexAttribute.NORMALS ) ); // va1
 
-			_specularColor = Vector.<Number>( [1.0, 1.0, 1.0, 1.0] );
-			_lightProperties = Vector.<Number>( [0.0, 1.0, 1.0, 2.0] ); // ambient, diffuse, specular, specular concentration multiplier (gloss)
-		}
+			// vertex constants
+			var mvc:RegisterConstant = addVertexConstant( new MatrixRegisterConstant( "modelViewProjection", null, new RegisterMapping( RegisterMapping.MVC_MAPPING ) ) ); // vc0 to vc3
+			var transform:RegisterConstant = addVertexConstant( new MatrixRegisterConstant( "transform", null, new RegisterMapping( RegisterMapping.TRANSFORM_MAPPING ) ) ); // vc4 to vc7
+			var reducedTransform:RegisterConstant = addVertexConstant( new MatrixRegisterConstant( "reducedTransform", null, new RegisterMapping( RegisterMapping.REDUCED_TRANSFORM_MAPPING ) ) ); // vc8 to vc11
+			var lightPosition:VectorRegisterConstant = addVertexConstant( new VectorRegisterConstant( "lightPosition", 0, 0, 0, 0, new RegisterMapping( RegisterMapping.CAMERA_MAPPING ) ) ) as VectorRegisterConstant; // vc12
+			var cameraPosition:VectorRegisterConstant = addVertexConstant( new VectorRegisterConstant( "cameraPosition", 0, 0, 0, 0, new RegisterMapping( RegisterMapping.CAMERA_MAPPING ) ) ) as VectorRegisterConstant; // vc13
+			lightPosition.setComponentRanges( new Point( -5, 5 ), new Point( -5, 5 ), new Point( -5, 5 ), new Point( -5, 5 ) );
+			cameraPosition.setComponentRanges( new Point( -5, 5 ), new Point( -5, 5 ), new Point( -5, 5 ), new Point( -5, 5 ) );
 
-		override protected function buildProgram3d():void
-		{
-			// define shader
-			var vertexAGAL:String = "" +
-					"m44 vt0, va0,  vc4            \n" + // line 1 - transform vertex position to scene space
-					"sub vt0, vc12, vt0            \n" + // line 2 - get direction to light
-					"mov v0,  vt0                  \n" + // line 3 - interpolate direction to light - v0
-					"sub vt1, vc13, vt0            \n" + // line 4 - get direction to camera
-					"mov v1,  vt1                  \n" + // line 5 - interpolate direction to camera - v1
-					"m44 vt2, va1,  vc8            \n" + // line 6 - transform vertex normal to scene space (ignoring position)
-					"mov v2,  vt2                  \n" + // line 7 - interpolate vertex normal - v2
-					"m44 op,  va0,  vc0            \n";  // line 8 - output vertex position to clip space
-			var fragmentAGAL:String = "" +
-					// normalize input
-					"nrm ft0.xyz, v0               \n" + // line 1 - normalize interpolated direction to light - ft0
-					"mov ft0.w,   fc3.x            \n" + // line 2 - set w to 1.0
-					"nrm ft1.xyz, v1               \n" + // line 3 - normalize interpolated direction to camera - ft1
-					"mov ft1.w,   fc3.x            \n" + // line 4 - set w to 1.0
-					"nrm ft2.xyz, v2               \n" + // line 5 - normalize interpolated normal - ft2
-					"mov ft2.w,   fc3.x            \n" + // line 6 - set w to 1.0
-					// calculate diffuse term - ft3
-					"dp3 ft3.x,   ft2,     ft0     \n" + // line 7  - find projection of direction to light on normal - ft3.x
-					"max ft3.x,   ft3.x,   fc3.w   \n" + // line 8  - ignore negative values
-					"mul ft3.x,   ft3.x,   fc2.y   \n" + // line 9  - multiply projection of direction to light on normal with light's diffuse amount
-					"add ft3.x,   ft3.x,   fc2.x   \n" + // line 10 - add light's ambient amount
-					"mul ft3.xyz, ft3.xxx, fc0.xyz \n" + // line 11 - multiply by material's diffuse color
-					// calculate specular term - ft4
-					"add ft4.xyz, ft0.xyz, ft1.xyz \n" + // line 12  - evaluate half vector
-					"nrm ft4.xyz, ft4.xyz          \n" + // line 13 - normalize half vector
-					"dp3 ft4.x,   ft2.xyz, ft4.xyz \n" + // line 14 - find projection of half vector on normal
-					"max ft4.x,   ft4.x,   fc3.w   \n" + // line 15 - ignore negative values
-					"pow ft4.x,   ft4.x,   fc2.w   \n" + // line 16 - apply concentration (gloss)
-					"mul ft4.x,   ft4.x,   fc2.z   \n" + // line 17 - multiply with light's specular amount
-					"mul ft4.xyz, ft4.xxx, fc1     \n" + // line 18 - multiply by materials specular color
-					// output - ft5
-					"add ft5.xyz, ft3.xyz, ft4.xyz \n" + // line 19 - combine diffuse and specular terms
-					"mov ft5.w,   fc3.x			   \n" + // line 20 - set ft5.w = 1.0
-					"mov oc,      ft5              \n";  // line 21 - output
+			// fragment constants
+			var diffuseColor:VectorRegisterConstant = addFragmentConstant( new VectorRegisterConstant( "diffuseColor", rgb.r / 255, rgb.g / 255, rgb.b / 255, rgb.a ) ) as VectorRegisterConstant;
+			var specularColor:VectorRegisterConstant = addFragmentConstant( new VectorRegisterConstant( "specularColor", 1, 1, 1, 1 ) ) as VectorRegisterConstant;
+			var lightProperties:VectorRegisterConstant = addFragmentConstant( new VectorRegisterConstant( "lightProperties", 0, 1, 0.5, 50 ) ) as VectorRegisterConstant;
+			diffuseColor.setComponentNames( "red", "green", "blue", "alpha" );
+			specularColor.setComponentNames( "red", "green", "blue", "alpha" );
+			lightProperties.setComponentNames( "ambient", "diffuse", "specular", "gloss" );
+			lightProperties.compRanges[ 3 ] = new Point( 0, 100 );
 
-			initAGAL( vertexAGAL, fragmentAGAL, false );
-		}
+			// varying
+			var interpolatedDirToLight:Varying = addVarying( new Varying( "interpolatedDirToLight" ) );
+			var interpolatedDirToCamera:Varying = addVarying( new Varying( "interpolatedDirToCamera" ) );
+			var interpolatedNormals:Varying = addVarying( new Varying( "interpolatedNormals" ) );
 
-		override public function drawMesh( mesh:Mesh, light:PointLight ):void
-		{
-			if( !_isProgramValid ) {
-				return;
-			}
+			// vertex agal
+			var sceneSpaceVertexPosition:Temporary = addTemporary( new VertexTemporary( "sceneSpaceVertexPosition" ) );
+			_vertexAGAL += m44( sceneSpaceVertexPosition, vertexPositions, transform, "calculate vertex positions in scene space" );
+			_vertexAGAL += sub( interpolatedDirToLight, lightPosition, sceneSpaceVertexPosition, "interpolate direction to light" );
+			_vertexAGAL += sub( interpolatedDirToCamera, cameraPosition, sceneSpaceVertexPosition, "interpolate direction to camera" );
+			_vertexAGAL += m44( interpolatedNormals, vertexNormals, reducedTransform, "interpolate normal positions in scene space (ignoring position)" );
+			_vertexAGAL += m44( op, vertexPositions, mvc, "output position to clip space" );
 
-			_context3d.setProgram( _program3d );
+			// fragment agal
+			// normalize input
+			var normalizedDirToLight:Temporary = addTemporary( new FragmentTemporary( "normalizedDirToLight" ) );
+			_fragmentAGAL += nrm( normalizedDirToLight.xyz, interpolatedDirToLight, "normalize dir to light" );
+			var normalizedDirToCamera:Temporary = addTemporary( new FragmentTemporary( "normalizedDirToCamera" ) );
+			_fragmentAGAL += nrm( normalizedDirToCamera.xyz, interpolatedDirToCamera, "normalize dir to camera" );
+			var normalizedNormal:Temporary = addTemporary( new FragmentTemporary( "normalizedNormal" ) );
+			_fragmentAGAL += nrm( normalizedNormal.xyz, interpolatedNormals, "normalize normals" );
+			// calculate diffuse term
+			var diffuseTerm:Temporary = addTemporary( new FragmentTemporary( "diffuseTerm" ) );
+			_fragmentAGAL += dp3( diffuseTerm.x, normalizedNormal.xyz, normalizedDirToLight.xyz, "find projection of direction to light on normal" );
+			_fragmentAGAL += sat( diffuseTerm.x, diffuseTerm.x, "ignore negative values" );
+			_fragmentAGAL += mul( diffuseTerm.x, diffuseTerm.x, lightProperties.y, "multiply projection of direction to light on normal with light's diffuse amoun" );
+			_fragmentAGAL += add( diffuseTerm.x, diffuseTerm.x, lightProperties.x, "add light's ambient amount" );
+			_fragmentAGAL += mul( diffuseTerm.xyz, diffuseTerm.xxx, diffuseColor.xyz, "multiply by material's diffuse color" );
+			// calculate specular term
+			var specularTerm:Temporary = addTemporary( new FragmentTemporary( "specularTerm" ) );
+			_fragmentAGAL += add( specularTerm.xyz, normalizedDirToLight.xyz, normalizedDirToCamera.xyz, "evaluate half vector" );
+			_fragmentAGAL += nrm( specularTerm.xyz, specularTerm.xyz, "normalize half vector" );
+			_fragmentAGAL += dp3( specularTerm.x, normalizedNormal.xyz, specularTerm.xyz, "find projection of half vector on normal" );
+			_fragmentAGAL += sat( specularTerm.x, specularTerm.x, "ignore negative values" );
+			_fragmentAGAL += pow( specularTerm.x, specularTerm.x, lightProperties.w, "apply gloss" );
+			_fragmentAGAL += mul( specularTerm.x, specularTerm.x, lightProperties.z, "multiply with specular amount" );
+			_fragmentAGAL += mul( specularTerm.xyz, specularTerm.xxx, specularColor, "multiply with specular color" );
+			// output
+			var combinedTerms:Temporary = addTemporary( new FragmentTemporary( "combinedTerms" ) );
+			_fragmentAGAL += add( combinedTerms.xyz, diffuseTerm.xyz, specularTerm.xyz, "combine diffuse + specular" );
+			_fragmentAGAL += mov( oc, combinedTerms.xyz );
 
-			// set fragment constants
-			_context3d.setProgramConstantsFromVector( Context3DProgramType.FRAGMENT, 0, VectorUtils.multiply4( _diffuseColor, light.colorVector ) );  		// diffuse color    - fc0
-			_context3d.setProgramConstantsFromVector( Context3DProgramType.FRAGMENT, 1, VectorUtils.multiply4( _specularColor, light.colorVector ) ); 		// specular color   - fc1
-			_context3d.setProgramConstantsFromVector( Context3DProgramType.FRAGMENT, 2, VectorUtils.multiply4( _lightProperties, light.lightProperties ) ); // light properties - fc2
-			_context3d.setProgramConstantsFromVector( Context3DProgramType.FRAGMENT, 3, Vector.<Number>( [ 1.0, 0.0, 0.0, 0.0 ] ) ); 						// numeric literals - fc3
-
-			// set vertex constants
-			var modelViewProjectionMatrix:Matrix3D = new Matrix3D();
-			modelViewProjectionMatrix.append( mesh.transform );
-			modelViewProjectionMatrix.append( Core3D.instance.camera.viewProjectionMatrix );
-			_context3d.setProgramConstantsFromMatrix( Context3DProgramType.VERTEX, 0, modelViewProjectionMatrix, true );        // mvc - vc0 to vc3
-			_context3d.setProgramConstantsFromMatrix( Context3DProgramType.VERTEX, 4, mesh.transform, true ); 			        // transform - vc4 to vc7
-			_context3d.setProgramConstantsFromMatrix( Context3DProgramType.VERTEX, 8, mesh.reducedTransform, true );            // reduced transform - vc8 to vc11
-			_context3d.setProgramConstantsFromVector( Context3DProgramType.VERTEX, 12, light.positionVector ); 				    // light position   - vc12
-			_context3d.setProgramConstantsFromVector( Context3DProgramType.VERTEX, 13, Core3D.instance.camera.positionVector ); // camera position  - vc13
-
-			// set vertex attributes
-			_context3d.setVertexBufferAt( 0, mesh.positionsBuffer, 0, Context3DVertexBufferFormat.FLOAT_3 ); // positions - va0
-			_context3d.setVertexBufferAt( 1, mesh.normalsBuffer, 0, Context3DVertexBufferFormat.FLOAT_3 ); // normals - va1
-
-			// draw
-			try {
-				_context3d.drawTriangles( mesh.indexBuffer );
-			}
-			catch( e:Error ) {
-				trace( "Draw triangles failed: " + e.message );
-			}
-		}
-
-		override public function deactivate():void
-		{
-			_context3d.setVertexBufferAt( 0, null );
-			_context3d.setVertexBufferAt( 1, null );
-		}
-
-		public function get color():uint
-		{
-			return _diffuseColor[0] * 255 << 16 | _diffuseColor[1] * 255 << 8 | _diffuseColor[2] * 255;
-		}
-
-		public function set color( value:uint ):void
-		{
-			var rgb:RGB = ColorUtils.hexToRGB( value );
-			_diffuseColor = Vector.<Number>( [rgb.r / 255, rgb.g / 255, rgb.b / 255, 1.0] );
-		}
-
-		public function get specularColor():uint
-		{
-			return _specularColor[0] * 255 << 16 | _specularColor[1] * 255 << 8 | _diffuseColor[2] * 255;
-		}
-
-		public function set specularColor( value:uint ):void
-		{
-			var rgb:RGB = ColorUtils.hexToRGB( value );
-			_specularColor = Vector.<Number>( [rgb.r / 255, rgb.g / 255, rgb.b / 255, 1.0] );
+			setAGAL( _vertexAGAL, _fragmentAGAL );
+			
 		}
 	}
 }

@@ -220,7 +220,7 @@ public class Object3D
 
     public function set scaleX(value:Number):void
     {
-        _scaleX = value;
+        _scaleX = value != 0 ? value : 0.0001;
         _transformNeedsUpdate = true;
     }
     public function get scaleX():Number
@@ -233,7 +233,7 @@ public class Object3D
 
     public function set scaleY(value:Number):void
     {
-        _scaleY = value;
+        _scaleY = value != 0 ? value : 0.0001;
         _transformNeedsUpdate = true;
     }
     public function get scaleY():Number
@@ -246,7 +246,7 @@ public class Object3D
 
     public function set scaleZ(value:Number):void
     {
-        _scaleZ = value;
+        _scaleZ = value != 0 ? value : 0.0001;
         _transformNeedsUpdate = true;
     }
     public function get scaleZ():Number
@@ -269,7 +269,7 @@ public class Object3D
         _transform.appendRotation(_rotationDegreesY, Vector3D.Y_AXIS);
         _transform.appendRotation(_rotationDegreesZ, Vector3D.Z_AXIS);
 
-        _transform.appendScale(_scaleX, _scaleY, _scaleZ);
+        _transform.appendScale( _scaleX, _scaleY, _scaleZ );
 
         _transform.appendTranslation(_x, _y, _z);
 

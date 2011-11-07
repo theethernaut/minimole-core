@@ -1,7 +1,6 @@
 package com.li.minimole.core
 {
 import com.li.minimole.camera.Camera3D;
-import com.li.minimole.core.utils.PB3DUtil;
 
 /*
     A singleton class that holds global elements of the engine.
@@ -44,19 +43,6 @@ public class Core3D
     public function get scene():Scene3D
     {
         return _view.scene;
-    }
-
-    public function get debugShaders():Boolean
-    {
-        return _debugShaders;
-    }
-
-    public function set debugShaders(value:Boolean):void
-    {
-        _debugShaders = value;
-
-        if(_debugShaders)
-            PB3DUtil.tracePB3DVersion();
     }
 }
 }

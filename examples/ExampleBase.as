@@ -11,15 +11,11 @@ package examples
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-
 	import net.hires.debug.Stats;
-
-	import uk.co.soulwire.gui.SimpleGUI;
 
 	public class ExampleBase extends Sprite
 	{
 		public var view:View3D;
-		public var gui:SimpleGUI;
 		public var cameraController:OrbitCameraController;
 		public var stats:Stats;
 
@@ -45,9 +41,6 @@ package examples
 			stats.x = stage.stageWidth - 70;
 			addChild(stats);
 
-			// Turn on/off shader debugging.
-			Core3D.instance.debugShaders = false;
-
 			// Init camera controller.
 			cameraController = new OrbitCameraController(view.camera);
 
@@ -61,10 +54,6 @@ package examples
 
 			// Start loop.
 			addEventListener(Event.ENTER_FRAME, enterframeHandler);
-
-			// UI.
-			gui = new SimpleGUI(this);
-			gui.show();
 
 			onPostInit();
 		}
