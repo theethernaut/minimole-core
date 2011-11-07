@@ -19,7 +19,7 @@ package com.li.minimole.materials.agal.vo.registers
 		}
 
 		public function toStringExtended():String {
-			return toString() + ", " + name;
+			return registerPrefix + registerIndex + ", " + name;
 		}
 
 		public function cloneRegister():AGALRegister {
