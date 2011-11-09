@@ -1,5 +1,7 @@
-package com.li.minimole.materials.agal.registers
+package com.li.minimole.materials.agal.registers.attributes
 {
+
+	import com.li.minimole.materials.agal.registers.*;
 
 	import com.li.minimole.materials.agal.registers.AGALRegister;
 
@@ -7,9 +9,11 @@ package com.li.minimole.materials.agal.registers
 
 	public class VertexAttribute extends AGALRegister
 	{
-		public static const POSITIONS:String = "POSITIONS BUFFER";
-		public static const NORMALS:String = "NORMALS BUFFER";
-		public static const UVS:String = "UV BUFFER";
+		public static const POSITIONS:String = "POSITIONS_BUFFER";
+		public static const NORMALS:String = "NORMALS_BUFFER";
+		public static const UVS:String = "UV_BUFFER";
+		public static const VERTEX_COLORS:String = "VERTEX_COLORS";
+		public static const VERTEX_AREA_FACTORS:String = "VERTEX_AREA_FACTORS";
 
 		public var format:String;
 		public function VertexAttribute( name:String = "", type:String = "" ) {
@@ -21,11 +25,10 @@ package com.li.minimole.materials.agal.registers
 
 		public function refreshFormat():void {
 			switch( value ) {
-				case POSITIONS: {
-					this.format = Context3DVertexBufferFormat.FLOAT_3;
-					break;
-				}
-				case NORMALS: {
+				case POSITIONS:
+				case NORMALS:
+				case VERTEX_AREA_FACTORS:
+				case VERTEX_COLORS: {
 					this.format = Context3DVertexBufferFormat.FLOAT_3;
 					break;
 				}

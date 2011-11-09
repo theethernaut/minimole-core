@@ -6,11 +6,11 @@ package com.li.minimole.materials.agal
 	import com.li.minimole.materials.agal.data.TextureMipMappingType;
 	import com.li.minimole.materials.agal.data.TextureRepeatType;
 	import com.li.minimole.materials.agal.mappings.RegisterMapping;
-	import com.li.minimole.materials.agal.registers.FragmentSampler;
-	import com.li.minimole.materials.agal.registers.MatrixRegisterConstant;
-	import com.li.minimole.materials.agal.registers.RegisterConstant;
-	import com.li.minimole.materials.agal.registers.Varying;
-	import com.li.minimole.materials.agal.registers.VertexAttribute;
+	import com.li.minimole.materials.agal.registers.samplers.FragmentSampler;
+	import com.li.minimole.materials.agal.registers.constants.MatrixRegisterConstant;
+	import com.li.minimole.materials.agal.registers.constants.RegisterConstant;
+	import com.li.minimole.materials.agal.registers.varyings.Varying;
+	import com.li.minimole.materials.agal.registers.attributes.VertexAttribute;
 
 	import flash.display.BitmapData;
 

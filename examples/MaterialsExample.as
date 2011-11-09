@@ -2,10 +2,10 @@ package examples {
 
 	import com.li.minimole.materials.agal.AGALMaterial;
 	import com.li.minimole.materials.agal.mappings.RegisterMapping;
-	import com.li.minimole.materials.agal.registers.VertexAttribute;
-	import com.li.minimole.materials.agal.registers.MatrixRegisterConstant;
-	import com.li.minimole.materials.agal.registers.VectorRegisterConstant;
-	import com.li.minimole.materials.agal.registers.FragmentSampler;
+	import com.li.minimole.materials.agal.registers.attributes.VertexAttribute;
+	import com.li.minimole.materials.agal.registers.constants.MatrixRegisterConstant;
+	import com.li.minimole.materials.agal.registers.constants.VectorRegisterConstant;
+	import com.li.minimole.materials.agal.registers.samplers.FragmentSampler;
 
 	public class MaterialsExample extends HeadExampleBase {
 

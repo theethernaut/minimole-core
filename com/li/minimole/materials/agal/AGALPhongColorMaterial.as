@@ -6,14 +6,14 @@ package com.li.minimole.materials.agal
 	import com.li.minimole.materials.agal.methods.AGALPhongDiffuseMethod;
 	import com.li.minimole.materials.agal.methods.AGALPhongSpecularMethod;
 	import com.li.minimole.materials.agal.mappings.RegisterMapping;
-	import com.li.minimole.materials.agal.registers.FragmentTemporary;
-	import com.li.minimole.materials.agal.registers.MatrixRegisterConstant;
-	import com.li.minimole.materials.agal.registers.RegisterConstant;
-	import com.li.minimole.materials.agal.registers.Temporary;
-	import com.li.minimole.materials.agal.registers.Varying;
-	import com.li.minimole.materials.agal.registers.VectorRegisterConstant;
-	import com.li.minimole.materials.agal.registers.VertexAttribute;
-	import com.li.minimole.materials.agal.registers.VertexTemporary;
+	import com.li.minimole.materials.agal.registers.temporaries.FragmentTemporary;
+	import com.li.minimole.materials.agal.registers.constants.MatrixRegisterConstant;
+	import com.li.minimole.materials.agal.registers.constants.RegisterConstant;
+	import com.li.minimole.materials.agal.registers.temporaries.Temporary;
+	import com.li.minimole.materials.agal.registers.varyings.Varying;
+	import com.li.minimole.materials.agal.registers.constants.VectorRegisterConstant;
+	import com.li.minimole.materials.agal.registers.attributes.VertexAttribute;
+	import com.li.minimole.materials.agal.registers.temporaries.VertexTemporary;
 
 	import flash.geom.Point;
 

@@ -1,5 +1,7 @@
-package com.li.minimole.materials.agal.registers
+package com.li.minimole.materials.agal.registers.temporaries
 {
+
+	import com.li.minimole.materials.agal.registers.*;
 
 	public class Temporary extends AGALRegister
 	{

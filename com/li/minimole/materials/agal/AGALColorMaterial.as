@@ -4,9 +4,9 @@ package com.li.minimole.materials.agal
 	import com.li.minimole.core.utils.ColorUtils;
 	import com.li.minimole.core.vo.RGB;
 	import com.li.minimole.materials.agal.mappings.RegisterMapping;
-	import com.li.minimole.materials.agal.registers.VertexAttribute;
-	import com.li.minimole.materials.agal.registers.MatrixRegisterConstant;
-	import com.li.minimole.materials.agal.registers.VectorRegisterConstant;
+	import com.li.minimole.materials.agal.registers.attributes.VertexAttribute;
+	import com.li.minimole.materials.agal.registers.constants.MatrixRegisterConstant;
+	import com.li.minimole.materials.agal.registers.constants.VectorRegisterConstant;
 
 	public class AGALColorMaterial extends AGALMaterial
 	{

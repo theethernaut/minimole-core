@@ -1,5 +1,7 @@
-package com.li.minimole.materials.agal.registers
+package com.li.minimole.materials.agal.registers.constants
 {
+
+	import com.li.minimole.materials.agal.registers.*;
 
 	import com.li.minimole.materials.agal.mappings.RegisterMapping;
 

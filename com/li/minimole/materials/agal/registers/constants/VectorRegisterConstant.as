@@ -1,7 +1,9 @@
-package com.li.minimole.materials.agal.registers
+package com.li.minimole.materials.agal.registers.constants
 {
 
-	import com.li.minimole.materials.agal.registers.RegisterConstant;
+	import com.li.minimole.materials.agal.registers.*;
+
+	import com.li.minimole.materials.agal.registers.constants.RegisterConstant;
 
 	import flash.geom.Point;
 

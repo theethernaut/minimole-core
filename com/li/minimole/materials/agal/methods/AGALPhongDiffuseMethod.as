@@ -3,9 +3,9 @@ package com.li.minimole.materials.agal.methods
 
 	import com.li.minimole.materials.agal.AGALMaterial;
 	import com.li.minimole.materials.agal.registers.AGALRegister;
-	import com.li.minimole.materials.agal.registers.FragmentTemporary;
-	import com.li.minimole.materials.agal.registers.Temporary;
-	import com.li.minimole.materials.agal.registers.VectorRegisterConstant;
+	import com.li.minimole.materials.agal.registers.temporaries.FragmentTemporary;
+	import com.li.minimole.materials.agal.registers.temporaries.Temporary;
+	import com.li.minimole.materials.agal.registers.constants.VectorRegisterConstant;
 
 	public class AGALPhongDiffuseMethod extends AGALMethod
 	{

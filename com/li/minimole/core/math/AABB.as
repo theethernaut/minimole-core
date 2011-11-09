@@ -19,6 +19,10 @@ public class AABB
     {
     }
 
+	public function toString():String {
+		return "bounds: " + _minX + ", " + _maxX + ", " + _minY + ", " + _maxY + ", " + _minZ + ", " + _maxZ;
+	}
+
     public function updateFromPositions(positions:Vector.<Number>, transform:Matrix3D = null):void
     {
         _minX = Number.MAX_VALUE;

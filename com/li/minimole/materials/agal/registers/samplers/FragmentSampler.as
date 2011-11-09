@@ -1,5 +1,7 @@
-package com.li.minimole.materials.agal.registers
+package com.li.minimole.materials.agal.registers.samplers
 {
+
+	import com.li.minimole.materials.agal.registers.*;
 
 	import flash.display.BitmapData;
 	import flash.display3D.textures.Texture;

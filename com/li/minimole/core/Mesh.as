@@ -4,6 +4,7 @@ package com.li.minimole.core
 	import com.li.minimole.core.math.AABB;
 	import com.li.minimole.core.utils.Vector3dUtils;
 	import com.li.minimole.debugging.errors.RawBufferEmptyError;
+	import com.li.minimole.debugging.logging.Log;
 	import com.li.minimole.materials.MaterialBase;
 	import com.li.minimole.primitives.WireCube;
 
@@ -242,12 +243,20 @@ package com.li.minimole.core
 			return _extraBuffer0;
 		}
 
+		public function get extraBuffer0Initialized():Boolean {
+			return _extraBuffer0 != null;
+		}
+
 		public function get extraBuffer1():VertexBuffer3D
 		{
 			if( !_extraBuffer1 )
 				updateExtraBuffer1();
 
 			return _extraBuffer1;
+		}
+
+		public function get extraBuffer1Initialized():Boolean {
+			return _extraBuffer1 != null;
 		}
 
 		// ------------------------------------------------------------------
@@ -260,8 +269,12 @@ package com.li.minimole.core
 				throw new RawBufferEmptyError();
 
 			var nCount:uint = _rawExtraBuffer0.length / 3;
-			_extraBuffer0 = _context3d.createVertexBuffer( nCount, 3 );
-			_extraBuffer0.uploadFromVector( _rawExtraBuffer0, 0, nCount );
+			try {
+				_extraBuffer0 = _context3d.createVertexBuffer( nCount, 3 );
+				_extraBuffer0.uploadFromVector( _rawExtraBuffer0, 0, nCount );
+			} catch( e:Error ) {
+				Log.error(e.message);
+			}
 		}
 
 		public function updateExtraBuffer1():void
@@ -270,8 +283,12 @@ package com.li.minimole.core
 				throw new RawBufferEmptyError();
 
 			var nCount:uint = _rawExtraBuffer1.length / 3;
-			_extraBuffer1 = _context3d.createVertexBuffer( nCount, 3 );
-			_extraBuffer1.uploadFromVector( _rawExtraBuffer1, 0, nCount );
+			try {
+				_extraBuffer1 = _context3d.createVertexBuffer( nCount, 3 );
+				_extraBuffer1.uploadFromVector( _rawExtraBuffer1, 0, nCount );
+			} catch( e:Error ) {
+				Log.error(e.message);
+			}
 		}
 
 		public function updateColorsBuffer():void
@@ -280,8 +297,12 @@ package com.li.minimole.core
 				throw new RawBufferEmptyError();
 
 			var colorsCount:uint = _rawColorsBuffer.length / 3;
-			_colorsBuffer = _context3d.createVertexBuffer( colorsCount, 3 );
-			_colorsBuffer.uploadFromVector( _rawColorsBuffer, 0, colorsCount );
+			try {
+				_colorsBuffer = _context3d.createVertexBuffer( colorsCount, 3 );
+				_colorsBuffer.uploadFromVector( _rawColorsBuffer, 0, colorsCount );
+			} catch( e:Error ) {
+				Log.error(e.message);
+			}
 		}
 
 		public function updateNormalsBuffer():void
@@ -290,8 +311,12 @@ package com.li.minimole.core
 				throw new RawBufferEmptyError();
 
 			var normalsCount:uint = _rawNormalsBuffer.length / 3;
-			_normalsBuffer = _context3d.createVertexBuffer( normalsCount, 3 );
-			_normalsBuffer.uploadFromVector( _rawNormalsBuffer, 0, normalsCount );
+			try {
+				_normalsBuffer = _context3d.createVertexBuffer( normalsCount, 3 );
+				_normalsBuffer.uploadFromVector( _rawNormalsBuffer, 0, normalsCount );
+			} catch( e:Error ) {
+				Log.error(e.message);
+			}
 		}
 
 		public function updatePositionsBuffer():void
@@ -303,8 +328,13 @@ package com.li.minimole.core
 				updateBounds();
 
 			var vertexCount:uint = _rawPositionsBuffer.length / 3;
-			_positionsBuffer = _context3d.createVertexBuffer( vertexCount, 3 );
-			_positionsBuffer.uploadFromVector( _rawPositionsBuffer, 0, vertexCount );
+
+			try {
+				_positionsBuffer = _context3d.createVertexBuffer( vertexCount, 3 );
+				_positionsBuffer.uploadFromVector( _rawPositionsBuffer, 0, vertexCount );
+			} catch( e:Error ) {
+				Log.error(e.message);
+			}
 		}
 
 		public function updateUvBuffer():void
@@ -313,8 +343,12 @@ package com.li.minimole.core
 				throw new RawBufferEmptyError();
 
 			var uvsCount:uint = _rawUvBuffer.length / 2;
-			_uvBuffer = _context3d.createVertexBuffer( uvsCount, 2 );
-			_uvBuffer.uploadFromVector( _rawUvBuffer, 0, uvsCount );
+			try {
+				_uvBuffer = _context3d.createVertexBuffer( uvsCount, 2 );
+				_uvBuffer.uploadFromVector( _rawUvBuffer, 0, uvsCount );
+			} catch( e:Error ) {
+				Log.error(e.message);
+			}
 		}
 
 		public function updateIndexBuffer():void
@@ -322,8 +356,12 @@ package com.li.minimole.core
 			if( _rawIndexBuffer.length == 0 )
 				throw new RawBufferEmptyError();
 
-			_indexBuffer = _context3d.createIndexBuffer( _rawIndexBuffer.length );
-			_indexBuffer.uploadFromVector( _rawIndexBuffer, 0, _rawIndexBuffer.length );
+			try {
+				_indexBuffer = _context3d.createIndexBuffer( _rawIndexBuffer.length );
+				_indexBuffer.uploadFromVector( _rawIndexBuffer, 0, _rawIndexBuffer.length );
+			} catch( e:Error ) {
+				Log.error(e.message);
+			}
 		}
 
 		// ------------------------------------------------------------------
@@ -385,6 +423,11 @@ package com.li.minimole.core
 				_rawNormalsBuffer.push( normal.x, normal.y, normal.z );
 				_rawNormalsBuffer.push( normal.x, normal.y, normal.z );
 			}
+		}
+
+		public function get aabb():AABB {
+			_aabb.updateFromPositions( _rawPositionsBuffer, transform );
+			return _aabb;
 		}
 	}
 }

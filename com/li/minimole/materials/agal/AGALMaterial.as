@@ -4,6 +4,7 @@ package com.li.minimole.materials.agal
 	import com.adobe.utils.AGALMiniAssembler;
 	import com.li.minimole.core.Core3D;
 	import com.li.minimole.core.Mesh;
+	import com.li.minimole.core.utils.MeshUtils;
 	import com.li.minimole.core.utils.TextureUtils;
 	import com.li.minimole.debugging.logging.Log;
 	import com.li.minimole.lights.PointLight;
@@ -11,15 +12,15 @@ package com.li.minimole.materials.agal
 	import com.li.minimole.materials.agal.data.TextureMipMappingType;
 	import com.li.minimole.materials.agal.mappings.RegisterMapping;
 	import com.li.minimole.materials.agal.registers.AGALRegister;
-	import com.li.minimole.materials.agal.registers.FragmentTemporary;
-	import com.li.minimole.materials.agal.registers.Temporary;
-	import com.li.minimole.materials.agal.registers.VertexAttribute;
-	import com.li.minimole.materials.agal.registers.MatrixRegisterConstant;
-	import com.li.minimole.materials.agal.registers.RegisterConstant;
-	import com.li.minimole.materials.agal.registers.VectorRegisterConstant;
-	import com.li.minimole.materials.agal.registers.FragmentSampler;
-	import com.li.minimole.materials.agal.registers.Varying;
-	import com.li.minimole.materials.agal.registers.VertexTemporary;
+	import com.li.minimole.materials.agal.registers.temporaries.FragmentTemporary;
+	import com.li.minimole.materials.agal.registers.temporaries.Temporary;
+	import com.li.minimole.materials.agal.registers.attributes.VertexAttribute;
+	import com.li.minimole.materials.agal.registers.constants.MatrixRegisterConstant;
+	import com.li.minimole.materials.agal.registers.constants.RegisterConstant;
+	import com.li.minimole.materials.agal.registers.constants.VectorRegisterConstant;
+	import com.li.minimole.materials.agal.registers.samplers.FragmentSampler;
+	import com.li.minimole.materials.agal.registers.varyings.Varying;
+	import com.li.minimole.materials.agal.registers.temporaries.VertexTemporary;
 
 	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DTextureFormat;
@@ -66,7 +67,19 @@ package com.li.minimole.materials.agal
 			_currentAGAL += "neg " + target + C + source1 + end( comment );
 		}
 
+		public function sqt( target:AGALRegister, source1:AGALRegister, comment:String = "" ):void {
+			_currentAGAL += "sqt " + target + C + source1 + end( comment );
+		}
+
+		public function exp( target:AGALRegister, source1:AGALRegister, comment:String = "" ):void {
+			_currentAGAL += "exp " + target + C + source1 + end( comment );
+		}
+
 		// 2 terms
+
+		public function min( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
+			_currentAGAL += "min " + target + C + source1 + C + source2 + end( comment );
+		}
 
 		public function pow( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
 			_currentAGAL += "pow " + target + C + source1 + C + source2 + end( comment );
@@ -78,6 +91,10 @@ package com.li.minimole.materials.agal
 
 		public function mul( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
 			_currentAGAL += "mul " + target + C + source1 + C + source2 + end( comment );
+		}
+
+		public function div( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
+			_currentAGAL += "div " + target + C + source1 + C + source2 + end( comment );
 		}
 
 		public function m44( target:AGALRegister, source1:AGALRegister, source2:AGALRegister, comment:String = "" ):void {
@@ -120,7 +137,7 @@ package com.li.minimole.materials.agal
 				return "\n";
 			}
 			else {
-				return "// " + comment + "\n";
+				return " // " + comment + "\n";
 			}
 		}
 
@@ -307,6 +324,15 @@ package com.li.minimole.materials.agal
 				if( attribute.value == VertexAttribute.POSITIONS ) buffer = mesh.positionsBuffer;
 				else if( attribute.value == VertexAttribute.NORMALS ) buffer = mesh.normalsBuffer;
 				else if( attribute.value == VertexAttribute.UVS ) buffer = mesh.uvBuffer;
+				else if( attribute.value == VertexAttribute.VERTEX_COLORS ) buffer = mesh.colorsBuffer;
+				else if( attribute.value == VertexAttribute.VERTEX_AREA_FACTORS ) {
+
+					if( !mesh.extraBuffer0Initialized ) {
+						MeshUtils.prepareMeshForWireframe( mesh );
+					}
+
+					buffer = mesh.extraBuffer0;
+				}
 				else throw new Error( "Vertex attribute of type " + attribute.value + " are not yet supported." );
 				_context3d.setVertexBufferAt( registerIndex, buffer, 0, attribute.format );
 				registerIndex++;
